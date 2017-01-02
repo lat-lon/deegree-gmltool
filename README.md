@@ -19,20 +19,29 @@ Usage: java -jar deegree-cli-utility.jar [options] schema_url
 options:
  --format={deegree/ddl}
  --srid=<epsg_code>
+ --idtype={int|uuid}
 ```
 
-### Example: Generate ddl for INSPIRE Cadastral Parcels 4.0
+### Example: Generate ddl for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
 
-    java -jar deegree-cli-utility.jar --srid=25832 --format=ddl http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+    java -jar deegree-cli-utility.jar --srid=25832 --format=ddl --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
-### Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0
+### Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
 
-    java -jar deegree-cli-utility.jar --srid=25832 --format=deegree http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+    java -jar deegree-cli-utility.jar --srid=25832 --format=deegree --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+
+### Example: Generate ddl for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+
+    java -jar deegree-cli-utility.jar --srid=25832 --format=ddl --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+
+### Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+
+    java -jar deegree-cli-utility.jar --srid=25832 --format=deegree --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
 
 ## Behind http proxy
 
 Set the `http.proxyHost`, `http.proxyPort` and `http.nonProxyHosts` config properties.
 
-    java -Dhttp.proxyHost=your-proxy.net -Dhttp.proxyPort=80 -jar deegree-cli-utility.jar --format=ddl http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+    java -Dhttp.proxyHost=your-proxy.net -Dhttp.proxyPort=80 -jar deegree-cli-utility.jar --format=ddl --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
