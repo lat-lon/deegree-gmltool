@@ -28,11 +28,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-nop</artifactId>
-            <version>1.7.5</version>
-        </dependency>
-        <dependency>
             <groupId>org.deegree</groupId>
             <artifactId>deegree-core-base</artifactId>
             <version>${deegree.version}</version>
