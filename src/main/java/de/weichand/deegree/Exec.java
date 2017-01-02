@@ -27,6 +27,7 @@ public class Exec {
     
     private static String format = "deegree";
     private static int srid = 4258;
+    private static boolean useIntegerFids = true;
 
     public static void main(String[] args) throws Exception 
     {
@@ -38,6 +39,7 @@ public class Exec {
             System.out.println("options:");
             System.out.println(" --format={deegree/ddl}");
             System.out.println(" --srid=<epsg_code>");
+            System.out.println(" --idtype={int|uuid}");
             return;
         }
         
@@ -52,6 +54,11 @@ public class Exec {
             {
                 srid = Integer.valueOf(arg.split("=")[1]);
             }
+            else if (arg.startsWith("--idtype"))
+            {
+                String idMappingArg = arg.split("=")[1];
+                useIntegerFids = idMappingArg.equals( "uuid" ) ? false : true;
+            }
             else 
             {
                 schemaUrl = arg;
@@ -64,7 +71,7 @@ public class Exec {
         
         CRSRef storageCrs = CRSManager.getCRSRef( "EPSG:" + String.valueOf(srid) );
         GeometryStorageParams geometryParams = new GeometryStorageParams( storageCrs, String.valueOf(srid), DIM_2 );
-        AppSchemaMapper mapper = new AppSchemaMapper( appSchema, false, true, geometryParams, 64, true, false );
+        AppSchemaMapper mapper = new AppSchemaMapper( appSchema, false, true, geometryParams, 64, true, useIntegerFids );
         MappedAppSchema mappedSchema = mapper.getMappedSchema();
         SQLFeatureStoreConfigWriter configWriter = new SQLFeatureStoreConfigWriter( mappedSchema );
 
