@@ -4,12 +4,12 @@
 
 Command line utility based on [deegree3](https://github.com/deegree/deegree3) to generate `DDL` and `deegree SQLFeatureStore` from GML application schemas. 
 
-You can download the latest release [here](https://github.com/JuergenWeichand/deegree-cli-utility/releases) or build it yourself. 
+You can download the latest release [here](https://github.com/lat-lon/deegree-cli-utility/releases) or build it yourself.
 
-    git clone https://github.com/JuergenWeichand/deegree-cli-utility.git
+    git clone https://github.com/lat-lon/deegree-cli-utility.git
     cd deegree-cli-utility/
+    git checkout deegree-3.4
     mvn clean compile assembly:single
-
 
 ## Usage
 
