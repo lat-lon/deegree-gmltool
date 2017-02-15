@@ -37,6 +37,13 @@
         </developer>
     </developers>
 
+    <scm>
+        <connection>scm:git:git@github.com:lat-lon/deegree-cli-utility.git</connection>
+        <developerConnection>scm:git:git@github.com:lat-lon/deegree-cli-utility.git</developerConnection>
+        <url>https://github.com/lat-lon/deegree-cli-utility</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -135,5 +142,16 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>deegree-releases</id>
+            <url>http://repo.deegree.org/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>deegree-snapshots</id>
+            <url>http://repo.deegree.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
