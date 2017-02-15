@@ -145,12 +145,12 @@
 
     <distributionManagement>
         <repository>
-            <id>deegree-releases</id>
-            <url>http://repo.deegree.org/content/repositories/releases/</url>
+            <id>latlon-deegreeaddons-releases</id>
+            <url>http://repo.lat-lon/nexus/content/repositories/deegreeaddons-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>deegree-snapshots</id>
-            <url>http://repo.deegree.org/content/repositories/snapshots/</url>
+            <id>latlon-deegreeaddons-snapshots</id>
+            <url>http://repo.lat-lon/nexus/content/repositories/deegreeaddons-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
