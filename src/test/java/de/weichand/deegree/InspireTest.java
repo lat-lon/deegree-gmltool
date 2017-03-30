@@ -38,11 +38,6 @@ public class InspireTest {
     
     final String SCHEMA_URL_CP = "http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd";
     
-    public InspireTest() {
-    }
-    
-  
-
     @Test
     public void schemaOnly() throws Exception 
     {
@@ -58,9 +53,23 @@ public class InspireTest {
     }
     
     @Test
-    public void schemaToDeegreeConfigWithSrid() throws Exception 
+    public void schemaToDeegreeConfigWithSrid() throws Exception
     {
         String[] args = { SCHEMA_URL_CP, "--format=deegree","--srid=31468" };
+        Exec.main(args);
+    }
+
+    @Test
+    public void schemaToDeegreeConfigAndSqlDdl() throws Exception
+    {
+        String[] args = { SCHEMA_URL_CP, "--format=all","--srid=31468" };
+        Exec.main(args);
+    }
+
+    @Test
+    public void schemaToSqlDdl() throws Exception
+    {
+        String[] args = { SCHEMA_URL_CP, "--format=ddl" };
         Exec.main(args);
     }
 }
