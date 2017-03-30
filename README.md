@@ -17,12 +17,12 @@ You can download the latest release [here](https://github.com/lat-lon/deegree-cl
 Usage: java -jar deegree-cli-utility.jar [options] schema_url
 
 options:
- --format={deegree/ddl}
+ --format={deegree|ddl|all}
  --srid=<epsg_code>
  --idtype={int|uuid}
 ```
 
-### Example: Generate ddl for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
+### Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
 
     java -jar deegree-cli-utility.jar --srid=25832 --format=ddl --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
@@ -30,7 +30,7 @@ options:
 
     java -jar deegree-cli-utility.jar --srid=25832 --format=deegree --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
-### Example: Generate ddl for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+### Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
 
     java -jar deegree-cli-utility.jar --srid=25832 --format=ddl --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
@@ -38,6 +38,9 @@ options:
 
     java -jar deegree-cli-utility.jar --srid=25832 --format=deegree --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
+### Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+
+    java -jar deegree-cli-utility.jar --srid=25832 --format=all --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
 ## Behind http proxy
 
