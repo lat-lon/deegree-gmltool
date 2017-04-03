@@ -9,7 +9,7 @@ You can download the latest release [here](https://github.com/lat-lon/deegree-cl
     git clone https://github.com/lat-lon/deegree-cli-utility.git
     cd deegree-cli-utility/
     git checkout deegree-3.4
-    mvn clean compile assembly:single
+    mvn clean compile assembly:single -Pjar-with-dependencies
 
 ## Usage
 
