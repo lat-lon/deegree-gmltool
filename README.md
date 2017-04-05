@@ -9,7 +9,7 @@ You can download the latest release [here](https://github.com/lat-lon/deegree-cl
     git clone https://github.com/lat-lon/deegree-cli-utility.git
     cd deegree-cli-utility/
     git checkout deegree-3.4
-    mvn clean compile assembly:single -Pjar-with-dependencies
+    mvn clean package -Pjar-with-dependencies
 
 ## Usage
 
@@ -17,9 +17,11 @@ You can download the latest release [here](https://github.com/lat-lon/deegree-cl
 Usage: java -jar deegree-cli-utility.jar [options] schema_url
 
 options:
- --format={deegree|ddl|all}
- --srid=<epsg_code>
- --idtype={int|uuid}
+ --format={deegree|ddl|all}, default=deegree
+ --srid=<epsg_code>, default=4258
+ --idtype={int|uuid}, default=int
+ --mapping={relational|blob}, default=relational
+ --dialect={postgis|oracle}, default=postgis
 ```
 
 The SQL DDL and XML output is written into files in the current directory. The filename of each file is derived from the 
@@ -54,6 +56,19 @@ The generated file is './CadastralParcels.xml'.
     java -jar deegree-cli-utility.jar --srid=25832 --format=all --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
+
+### Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with Blob-Mapping
+
+    java -jar deegree-cli-utility.jar --format=all --mapping=blob http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+    
+The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with Blob-Mapping for PostGIS.    
+
+### Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 for Oracle DBMS with Oracle Locator
+
+    java -jar deegree-cli-utility.jar --format=all --dialect=oracle http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+
+The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with relational mapping for Oracle Locator.
+
 
 ## Behind http proxy
 

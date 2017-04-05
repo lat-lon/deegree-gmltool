@@ -67,9 +67,51 @@ public class InspireTest {
     }
 
     @Test
+    public void schemaToDeegreeConfigAndSqlDdlAndIdTypeInteger() throws Exception
+    {
+        String[] args = { SCHEMA_URL_CP, "--format=all","--srid=4326", "--idtype=int" };
+        Exec.main(args);
+    }
+
+    @Test
+    public void schemaToDeegreeConfigAndSqlDdlAndIdTypeUuid() throws Exception
+    {
+        String[] args = { SCHEMA_URL_CP, "--format=all","--srid=4326", "--idtype=uuid" };
+        Exec.main(args);
+    }
+
+    @Test
     public void schemaToSqlDdl() throws Exception
     {
         String[] args = { SCHEMA_URL_CP, "--format=ddl" };
+        Exec.main(args);
+    }
+
+    @Test
+    public void schemaToDeegreeConfigAndSqlDdlWithBlobMapping() throws Exception
+    {
+        String[] args = { SCHEMA_URL_CP, "--format=all", "--mapping=blob" };
+        Exec.main(args);
+    }
+
+    @Test
+    public void schemaToDeegreeConfigAndSqlDdlWithBlobMappingAndAllOptions() throws Exception
+    {
+        String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=4326", "--mapping=blob" };
+        Exec.main(args);
+    }
+
+    @Test
+    public void schemaToDeegreeConfigAndSqlDdlWithForOracle() throws Exception
+    {
+        String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=4326", "--dialect=oracle" };
+        Exec.main(args);
+    }
+
+    @Test
+    public void schemaToDeegreeConfigAndSqlDdlWithBlobMappingForOracle() throws Exception
+    {
+        String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=4326", "--mapping=blob", "--dialect=oracle" };
         Exec.main(args);
     }
 }
