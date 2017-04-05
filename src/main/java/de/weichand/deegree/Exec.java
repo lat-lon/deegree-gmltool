@@ -21,9 +21,18 @@
  */
 package de.weichand.deegree;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import org.deegree.commons.xml.stax.IndentingXMLStreamWriter;
 import org.deegree.cs.persistence.CRSManager;
@@ -58,7 +67,7 @@ public class Exec {
             System.out.println("Usage: java -jar deegree-cli-utility.jar [options] schema_url");
             System.out.println("");
             System.out.println("options:");
-            System.out.println(" --format={deegree/ddl}");
+            System.out.println(" --format={deegree|ddl|all}");
             System.out.println(" --srid=<epsg_code>");
             System.out.println(" --idtype={int|uuid}");
             return;
@@ -95,21 +104,49 @@ public class Exec {
         AppSchemaMapper mapper = new AppSchemaMapper( appSchema, false, true, geometryParams, 64, true, useIntegerFids );
         MappedAppSchema mappedSchema = mapper.getMappedSchema();
         SQLFeatureStoreConfigWriter configWriter = new SQLFeatureStoreConfigWriter( mappedSchema );
+        String uriPathToSchema = new URI(schemaUrl).getPath();
+        String schemaFileName = uriPathToSchema.substring(uriPathToSchema.lastIndexOf('/') + 1);
+        String fileName = schemaFileName.replaceFirst("[.][^.]+$", "");
 
-        if (format.equals("deegree")) 
+        if (format.equals("all"))
         {
-            XMLStreamWriter xmlWriter = XMLOutputFactory.newInstance().createXMLStreamWriter( System.out );
-            xmlWriter = new IndentingXMLStreamWriter( xmlWriter );
-
-            List<String> configUrls = Arrays.asList(schemaUrls);
-            configWriter.writeConfig( xmlWriter, "JDBC", configUrls );
-            xmlWriter.close();
+            writeSqlDdlFile(mappedSchema, fileName);
+            writeXmlConfigFile(schemaUrls, configWriter, fileName);
         }
-        else 
+        else if (format.equals("deegree"))
         {
-            SQLDialect dialect = new PostGISDialect("2.0.0");
-            String[] createStmts = DDLCreator.newInstance( mappedSchema, dialect).getDDL();
-            System.out.println(Arrays.asList(createStmts));               
-        }    
+            writeXmlConfigFile(schemaUrls, configWriter, fileName);
+        }
+        else if (format.equals("ddl"))
+        {
+            writeSqlDdlFile(mappedSchema, fileName);
+        }
+
+
   }
+
+    private static void writeSqlDdlFile(MappedAppSchema mappedSchema, String fileName) throws IOException {
+        SQLDialect dialect = new PostGISDialect("2.0.0");
+        String[] createStmts = DDLCreator.newInstance( mappedSchema, dialect).getDDL();
+        String sqlOutputFilename = "./"+fileName+".sql";
+        System.out.println( "Writing SQL DDL into file: " + sqlOutputFilename);
+        Path pathToSqlOutputFile = Paths.get(sqlOutputFilename);
+        try (BufferedWriter writer = Files.newBufferedWriter(pathToSqlOutputFile)) {
+            for (String sqlStatement: createStmts) {
+                writer.write(sqlStatement+";"+System.getProperty("line.separator"));
+            }
+        }
+    }
+
+    private static void writeXmlConfigFile(String[] schemaUrls, SQLFeatureStoreConfigWriter configWriter, String fileName) throws XMLStreamException, IOException {
+        List<String> configUrls = Arrays.asList(schemaUrls);
+        String xmlOutputFilename = "./"+fileName+".xml";
+        System.out.println( "Writing deegree FeatureStore config into file: " + xmlOutputFilename);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        XMLStreamWriter xmlWriter = XMLOutputFactory.newInstance().createXMLStreamWriter( bos );
+        xmlWriter = new IndentingXMLStreamWriter( xmlWriter );
+        configWriter.writeConfig( xmlWriter, fileName+"DS", configUrls );
+        xmlWriter.close();
+        Files.write(Paths.get(xmlOutputFilename), bos.toString().getBytes(StandardCharsets.UTF_8) );
+    }
 }
