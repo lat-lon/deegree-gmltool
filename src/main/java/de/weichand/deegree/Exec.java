@@ -21,6 +21,8 @@
  */
 package de.weichand.deegree;
 
+import static org.deegree.feature.types.property.GeometryPropertyType.CoordinateDimension.DIM_2;
+
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,11 +31,17 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+
 import org.deegree.commons.xml.stax.IndentingXMLStreamWriter;
 import org.deegree.cs.persistence.CRSManager;
 import org.deegree.cs.refs.coordinatesystem.CRSRef;
@@ -43,7 +51,6 @@ import org.deegree.feature.persistence.sql.config.SQLFeatureStoreConfigWriter;
 import org.deegree.feature.persistence.sql.ddl.DDLCreator;
 import org.deegree.feature.persistence.sql.mapper.AppSchemaMapper;
 import org.deegree.feature.types.AppSchema;
-import static org.deegree.feature.types.property.GeometryPropertyType.CoordinateDimension.DIM_2;
 import org.deegree.gml.schema.GMLAppSchemaReader;
 import org.deegree.sqldialect.SQLDialect;
 import org.deegree.sqldialect.oracle.OracleDialect;
@@ -67,6 +74,9 @@ public class Exec {
 
     private static String dialect = "postgis"; // generates mapping for PostGIS dialect
 
+    private static List<QName> propertiesWithPrimitiveHref; // primitive href mapping instead of feature mapping is used
+                                                            // in deegree configuration for listed properties
+
     public static void main( String[] args )
                     throws Exception {
 
@@ -79,6 +89,7 @@ public class Exec {
             System.out.println( " --idtype={int|uuid}" );
             System.out.println( " --mapping={relational|blob}" );
             System.out.println( " --dialect={postgis|oracle}" );
+            System.out.println( " --listOfPropertiesWithPrimitiveHref=<path/to/file>" );
             return;
         }
 
@@ -101,6 +112,10 @@ public class Exec {
             } else if ( arg.startsWith( "--dialect" ) ) {
                 dialect = arg.split( "=" )[1];
                 System.out.println( "Using dialect=" + dialect );
+            } else if ( arg.startsWith( "--listOfPropertiesWithPrimitiveHref" ) ) {
+                String pathToFile = arg.split( "=" )[1];
+                propertiesWithPrimitiveHref = parsePropertiesWithPrimitiveHref( pathToFile );
+                System.out.println( "Using listOfPropertiesWithPrimitiveHref=" + propertiesWithPrimitiveHref );
             } else {
                 schemaUrl = arg;
             }
@@ -115,7 +130,8 @@ public class Exec {
         AppSchemaMapper mapper = new AppSchemaMapper( appSchema, !relationalMapping, relationalMapping, geometryParams,
                         64, true, useIntegerFids );
         MappedAppSchema mappedSchema = mapper.getMappedSchema();
-        SQLFeatureStoreConfigWriter configWriter = new SQLFeatureStoreConfigWriter( mappedSchema );
+        SQLFeatureStoreConfigWriter configWriter = new SQLFeatureStoreConfigWriter( mappedSchema,
+                        propertiesWithPrimitiveHref );
         String uriPathToSchema = new URI( schemaUrl ).getPath();
         String schemaFileName = uriPathToSchema.substring( uriPathToSchema.lastIndexOf( '/' ) + 1 );
         String fileName = schemaFileName.replaceFirst( "[.][^.]+$", "" );
@@ -159,4 +175,35 @@ public class Exec {
         xmlWriter.close();
         Files.write( Paths.get( xmlOutputFilename ), bos.toString().getBytes( StandardCharsets.UTF_8 ) );
     }
+
+    private static List<QName> parsePropertiesWithPrimitiveHref( String pathToFile ) {
+        try ( Stream<String> stream = Files.lines( Paths.get( pathToFile ) ) ) {
+            ArrayList<QName> properties = new ArrayList<>();
+            List<String> list = stream.collect( Collectors.toList() );
+            parseList( properties, list );
+            return properties;
+        } catch ( Exception e ) {
+            System.out.println( "Referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored!" );
+            return null;
+        }
+    }
+
+    private static void parseList( ArrayList<QName> properties, List<String> list ) {
+        for ( String entry : list ) {
+            parseEntry( properties, entry );
+        }
+    }
+
+    private static void parseEntry( ArrayList<QName> properties, String entry ) {
+        String[] splitEntry = entry.split( "\",\"" );
+        if ( splitEntry.length == 2 ) {
+            String namespaceUri = splitEntry[0].replace( "\"", "" );
+            String localPart = splitEntry[1].replace( "\"", "" );
+            QName qName = new QName( namespaceUri, localPart );
+            properties.add( qName );
+        } else
+            System.out.println( "One line of referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored: "
+                                + entry );
+    }
+
 }

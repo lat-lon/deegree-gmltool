@@ -107,4 +107,13 @@ public class InspireTest {
         String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=4326", "--mapping=blob", "--dialect=oracle" };
         Exec.main( args );
     }
+
+    @Test
+    public void schemaToDeegreeConfigAndListOfPropertiesWithPrimitiveHref()
+                    throws Exception {
+        String[] args = { SCHEMA_URL_CP, "--format=deegree",
+                         "--listOfPropertiesWithPrimitiveHref=src/test/resources/listOfPropertiesWithPrimitiveHref" };
+        Exec.main( args );
+    }
+
 }
