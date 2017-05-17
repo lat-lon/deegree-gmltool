@@ -22,6 +22,7 @@ options:
  --idtype={int|uuid}, default=int
  --mapping={relational|blob}, default=relational
  --dialect={postgis|oracle}, default=postgis
+ --listOfPropertiesWithPrimitiveHref=<path/to/file>
 ```
 
 The SQL DDL and XML output is written into files in the current directory. The filename of each file is derived from the 
@@ -69,6 +70,26 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' wi
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with relational mapping for Oracle Locator.
 
+### Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with list of properties with primitive href
+
+    java -jar deegree-cli-utility.jar --format=deegree --listOfPropertiesWithPrimitiveHref=<path/to/file> http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+
+The generated file is './CadastralParcels.xml'. All properties listed in the referenced file are written with primitive instead of feature mappings.
+
+## Usage of option listOfPropertiesWithPrimitiveHref
+
+The option listOfPropertiesWithPrimitiveHref references a file listing properties which are written with primitive instead of feature mappings. This enables direct filtering on those properties with deegree. For example, filtering on INSPIRE codelist hrefs is possible then.
+
+Syntax of content of file:
+
+    "Namespace URI","local part"
+
+If multiple properties shall use primitive mappings, they must be listed in new lines.
+
+Example:
+
+    "http://inspire.ec.europa.eu/schemas/gn/4.0","nativeness"
+    "http://inspire.ec.europa.eu/schemas/ps/4.0","designation"
 
 ## Behind http proxy
 
