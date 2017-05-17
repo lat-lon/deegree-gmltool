@@ -21,97 +21,90 @@
  */
 package de.weichand.deegree;
 
-
-import de.weichand.deegree.Exec;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author weich_ju
  */
 public class InspireTest {
-    
+
     final String SCHEMA_URL_CP = "http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd";
-    
+
     @Test
-    public void schemaOnly() throws Exception 
-    {
+    public void schemaOnly()
+                    throws Exception {
         String[] args = { SCHEMA_URL_CP };
-        Exec.main(args);
+        Exec.main( args );
     }
-    
+
     @Test
-    public void schemaToDeegreeConfig() throws Exception 
-    {
+    public void schemaToDeegreeConfig()
+                    throws Exception {
         String[] args = { SCHEMA_URL_CP, "--format=deegree" };
-        Exec.main(args);
-    }
-    
-    @Test
-    public void schemaToDeegreeConfigWithSrid() throws Exception
-    {
-        String[] args = { SCHEMA_URL_CP, "--format=deegree","--srid=31468" };
-        Exec.main(args);
+        Exec.main( args );
     }
 
     @Test
-    public void schemaToDeegreeConfigAndSqlDdl() throws Exception
-    {
-        String[] args = { SCHEMA_URL_CP, "--format=all","--srid=31468" };
-        Exec.main(args);
+    public void schemaToDeegreeConfigWithSrid()
+                    throws Exception {
+        String[] args = { SCHEMA_URL_CP, "--format=deegree", "--srid=31468" };
+        Exec.main( args );
     }
 
     @Test
-    public void schemaToDeegreeConfigAndSqlDdlAndIdTypeInteger() throws Exception
-    {
-        String[] args = { SCHEMA_URL_CP, "--format=all","--srid=4326", "--idtype=int" };
-        Exec.main(args);
+    public void schemaToDeegreeConfigAndSqlDdl()
+                    throws Exception {
+        String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=31468" };
+        Exec.main( args );
     }
 
     @Test
-    public void schemaToDeegreeConfigAndSqlDdlAndIdTypeUuid() throws Exception
-    {
-        String[] args = { SCHEMA_URL_CP, "--format=all","--srid=4326", "--idtype=uuid" };
-        Exec.main(args);
+    public void schemaToDeegreeConfigAndSqlDdlAndIdTypeInteger()
+                    throws Exception {
+        String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=4326", "--idtype=int" };
+        Exec.main( args );
     }
 
     @Test
-    public void schemaToSqlDdl() throws Exception
-    {
+    public void schemaToDeegreeConfigAndSqlDdlAndIdTypeUuid()
+                    throws Exception {
+        String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=4326", "--idtype=uuid" };
+        Exec.main( args );
+    }
+
+    @Test
+    public void schemaToSqlDdl()
+                    throws Exception {
         String[] args = { SCHEMA_URL_CP, "--format=ddl" };
-        Exec.main(args);
+        Exec.main( args );
     }
 
     @Test
-    public void schemaToDeegreeConfigAndSqlDdlWithBlobMapping() throws Exception
-    {
+    public void schemaToDeegreeConfigAndSqlDdlWithBlobMapping()
+                    throws Exception {
         String[] args = { SCHEMA_URL_CP, "--format=all", "--mapping=blob" };
-        Exec.main(args);
+        Exec.main( args );
     }
 
     @Test
-    public void schemaToDeegreeConfigAndSqlDdlWithBlobMappingAndAllOptions() throws Exception
-    {
+    public void schemaToDeegreeConfigAndSqlDdlWithBlobMappingAndAllOptions()
+                    throws Exception {
         String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=4326", "--mapping=blob" };
-        Exec.main(args);
+        Exec.main( args );
     }
 
     @Test
-    public void schemaToDeegreeConfigAndSqlDdlWithForOracle() throws Exception
-    {
+    public void schemaToDeegreeConfigAndSqlDdlWithForOracle()
+                    throws Exception {
         String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=4326", "--dialect=oracle" };
-        Exec.main(args);
+        Exec.main( args );
     }
 
     @Test
-    public void schemaToDeegreeConfigAndSqlDdlWithBlobMappingForOracle() throws Exception
-    {
+    public void schemaToDeegreeConfigAndSqlDdlWithBlobMappingForOracle()
+                    throws Exception {
         String[] args = { SCHEMA_URL_CP, "--format=all", "--srid=4326", "--mapping=blob", "--dialect=oracle" };
-        Exec.main(args);
+        Exec.main( args );
     }
 }
