@@ -63,6 +63,8 @@ import org.deegree.sqldialect.postgis.PostGISDialect;
  */
 public class Exec {
 
+    private static final PropertyNameParser propertyNameParser = new PropertyNameParser();
+
     // default values
     private static String format = "deegree"; // generates deegree SQLFeatureStore config file only
 
@@ -114,7 +116,7 @@ public class Exec {
                 System.out.println( "Using dialect=" + dialect );
             } else if ( arg.startsWith( "--listOfPropertiesWithPrimitiveHref" ) ) {
                 String pathToFile = arg.split( "=" )[1];
-                propertiesWithPrimitiveHref = parsePropertiesWithPrimitiveHref( pathToFile );
+                propertiesWithPrimitiveHref = propertyNameParser.parsePropertiesWithPrimitiveHref( pathToFile );
                 System.out.println( "Using listOfPropertiesWithPrimitiveHref=" + propertiesWithPrimitiveHref );
             } else {
                 schemaUrl = arg;
@@ -174,36 +176,6 @@ public class Exec {
         configWriter.writeConfig( xmlWriter, fileName + "DS", configUrls );
         xmlWriter.close();
         Files.write( Paths.get( xmlOutputFilename ), bos.toString().getBytes( StandardCharsets.UTF_8 ) );
-    }
-
-    private static List<QName> parsePropertiesWithPrimitiveHref( String pathToFile ) {
-        try ( Stream<String> stream = Files.lines( Paths.get( pathToFile ) ) ) {
-            ArrayList<QName> properties = new ArrayList<>();
-            List<String> list = stream.collect( Collectors.toList() );
-            parseList( properties, list );
-            return properties;
-        } catch ( Exception e ) {
-            System.out.println( "Referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored!" );
-            return null;
-        }
-    }
-
-    private static void parseList( ArrayList<QName> properties, List<String> list ) {
-        for ( String entry : list ) {
-            parseEntry( properties, entry );
-        }
-    }
-
-    private static void parseEntry( ArrayList<QName> properties, String entry ) {
-        String[] splitEntry = entry.split( "\",\"" );
-        if ( splitEntry.length == 2 ) {
-            String namespaceUri = splitEntry[0].replace( "\"", "" );
-            String localPart = splitEntry[1].replace( "\"", "" );
-            QName qName = new QName( namespaceUri, localPart );
-            properties.add( qName );
-        } else
-            System.out.println( "One line of referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored: "
-                                + entry );
     }
 
 }
