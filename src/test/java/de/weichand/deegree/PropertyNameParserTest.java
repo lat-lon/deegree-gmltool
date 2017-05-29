@@ -26,8 +26,9 @@ public class PropertyNameParserTest {
         List<QName> qNames = propertyNameParser.parsePropertiesWithPrimitiveHref( resource.toURI() );
 
         assertThat( qNames.size(), is( 3 ) );
-        assertThat( qNames, hasItem( new QName( "nativeness" ) ) );
         assertThat( qNames, hasItem( new QName( "http://inspire.ec.europa.eu/schemas/gn/4.0", "nativeness" ) ) );
+        assertThat( qNames, hasItem( new QName( "nativeness" ) ) );
+        assertThat( qNames, hasItem( new QName( "nativenessWithSpace" ) ) );
     }
 
 }

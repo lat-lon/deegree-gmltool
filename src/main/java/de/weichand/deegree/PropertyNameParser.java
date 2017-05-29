@@ -21,10 +21,13 @@ import javax.xml.namespace.QName;
 public class PropertyNameParser {
 
     /**
-     * Parses the property names from the passed file. The properties are parsed line by line. empty lines are ignored.
+     * Parses the property names from the passed file. The properties are parsed line by line. Empty lines as well as
+     * comments (starting with #) are ignored. Leading and trailing white spaces are removed.
      *
      * @param pathToFile
-     * @return
+     *            the path to the file, never <code>null</code>
+     * @return the parsed properties, may be <code>null</code> if the properties file could not be parsed or empty if no
+     *         properties are parseable
      */
     public List<QName> parsePropertiesWithPrimitiveHref( String pathToFile ) {
         Path path = Paths.get( pathToFile );
@@ -32,10 +35,13 @@ public class PropertyNameParser {
     }
 
     /**
-     * Parses the property names from the passed file. The properties are parsed line by line. empty lines are ignored.
+     * Parses the property names from the passed file. The properties are parsed line by line. Empty lines as well as
+     * comments (starting with #) are ignored. Leading and trailing white spaces are removed.
      * 
      * @param pathToFile
-     * @return
+     *            the path to the file, never <code>null</code>
+     * @return the parsed properties, may be <code>null</code> if the properties file could not be parsed or empty if no
+     *         properties are parseable
      */
     public List<QName> parsePropertiesWithPrimitiveHref( URI pathToFile ) {
         Path path = Paths.get( pathToFile );
@@ -59,12 +65,15 @@ public class PropertyNameParser {
 
     private void parseList( ArrayList<QName> properties, List<String> list ) {
         for ( String entry : list ) {
-            try {
-                QName qName = QName.valueOf( entry );
-                properties.add( qName );
-            } catch ( IllegalArgumentException e ) {
-                System.out.println( "One line of referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored: "
-                                    + entry );
+            String trimmedEntry = entry.trim();
+            if ( !trimmedEntry.isEmpty() && !trimmedEntry.startsWith( "#" ) ) {
+                try {
+                    QName qName = QName.valueOf( trimmedEntry );
+                    properties.add( qName );
+                } catch ( IllegalArgumentException e ) {
+                    System.out.println( "One line of referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored: "
+                                        + entry );
+                }
             }
         }
     }
