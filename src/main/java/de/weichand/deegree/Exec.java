@@ -155,8 +155,8 @@ public class Exec {
                                                                     : new PostGISDialect( "2.0.0" );
         String[] createStmts = DDLCreator.newInstance( mappedSchema, sqlDialect ).getDDL();
         String sqlOutputFilename = "./" + fileName + ".sql";
-        System.out.println( "Writing SQL DDL into file: " + sqlOutputFilename );
         Path pathToSqlOutputFile = Paths.get( sqlOutputFilename );
+        System.out.println( "Writing SQL DDL into file: " + pathToSqlOutputFile.toUri() );
         try ( BufferedWriter writer = Files.newBufferedWriter( pathToSqlOutputFile ) ) {
             for ( String sqlStatement : createStmts ) {
                 writer.write( sqlStatement + ";" + System.getProperty( "line.separator" ) );
@@ -169,13 +169,14 @@ public class Exec {
                     throws XMLStreamException, IOException {
         List<String> configUrls = Arrays.asList( schemaUrls );
         String xmlOutputFilename = "./" + fileName + ".xml";
-        System.out.println( "Writing deegree SQLFeatureStore configuration into file: " + xmlOutputFilename );
+        Path pathToXmlOutputFile = Paths.get( xmlOutputFilename );
+        System.out.println( "Writing deegree SQLFeatureStore configuration into file: " + pathToXmlOutputFile.toUri() );
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         XMLStreamWriter xmlWriter = XMLOutputFactory.newInstance().createXMLStreamWriter( bos );
         xmlWriter = new IndentingXMLStreamWriter( xmlWriter );
         configWriter.writeConfig( xmlWriter, fileName + "DS", configUrls );
         xmlWriter.close();
-        Files.write( Paths.get( xmlOutputFilename ), bos.toString().getBytes( StandardCharsets.UTF_8 ) );
+        Files.write( pathToXmlOutputFile, bos.toString().getBytes( StandardCharsets.UTF_8 ) );
     }
 
 }
