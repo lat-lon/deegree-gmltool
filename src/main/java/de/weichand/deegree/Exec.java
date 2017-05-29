@@ -92,6 +92,18 @@ public class Exec {
             System.out.println( " --mapping={relational|blob}" );
             System.out.println( " --dialect={postgis|oracle}" );
             System.out.println( " --listOfPropertiesWithPrimitiveHref=<path/to/file>" );
+            System.out.println( "" );
+            System.out.println( "The file referenced by the option listOfPropertiesWithPrimitiveHref contains a list of property names containing static values instead of feature references if the type of a property is a gml:ReferenceType (see deegree-webservices documentation for further information):" );
+            System.out.println( "---------- begin file ----------" );
+            System.out.println( "# lines beginning with an # are ignored" );
+            System.out.println( "# property with namespace binding" );
+            System.out.println( "{http://inspire.ec.europa.eu/schemas/ps/4.0}designation" );
+            System.out.println( "# property without namespace binding" );
+            System.out.println( "designation" );
+            System.out.println( "# empty lines are ignore" );
+            System.out.println( "" );
+            System.out.println( "# leading and trailing white spaces are ignored" );
+            System.out.println( "---------- end file ----------" );
             return;
         }
 
