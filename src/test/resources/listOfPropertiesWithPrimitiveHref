@@ -1,6 +1,4 @@
-"http://inspire.ec.europa.eu/schemas/gn/4.0","nativeness"
+{http://inspire.ec.europa.eu/schemas/gn/4.0}nativeness
+nativeness
 
-"this","is","invalid"
-is,invalid
-invalid
-"not","existing"
+{thisis,invalid

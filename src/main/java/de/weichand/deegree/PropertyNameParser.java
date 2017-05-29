@@ -1,12 +1,17 @@
 package de.weichand.deegree;
 
-import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.xml.namespace.QName;
 
 /**
  * Parser for property names from a file.
@@ -17,37 +22,51 @@ public class PropertyNameParser {
 
     /**
      * Parses the property names from the passed file. The properties are parsed line by line. empty lines are ignored.
+     *
      * @param pathToFile
      * @return
      */
-    public static List<QName> parsePropertiesWithPrimitiveHref( String pathToFile ) {
-        try (Stream<String> stream = Files.lines( Paths.get( pathToFile ) )) {
+    public List<QName> parsePropertiesWithPrimitiveHref( String pathToFile ) {
+        Path path = Paths.get( pathToFile );
+        return parsePropertiesWithPrimitiveHref( path );
+    }
+
+    /**
+     * Parses the property names from the passed file. The properties are parsed line by line. empty lines are ignored.
+     * 
+     * @param pathToFile
+     * @return
+     */
+    public List<QName> parsePropertiesWithPrimitiveHref( URI pathToFile ) {
+        Path path = Paths.get( pathToFile );
+        return parsePropertiesWithPrimitiveHref( path );
+    }
+
+    private List<QName> parsePropertiesWithPrimitiveHref( Path path ) {
+        try (Stream<String> stream = Files.lines( path )) {
             ArrayList<QName> properties = new ArrayList<>();
             List<String> list = stream.collect( Collectors.toList() );
             parseList( properties, list );
             return properties;
-        } catch ( Exception e ) {
-            System.out.println( "Referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored!" );
-            return null;
+        } catch ( NoSuchFileException e ) {
+            System.out.println( "Referenced listOfPropertiesWithPrimitiveHref cannot be found and is ignored! " );
+        } catch ( IOException i ) {
+            System.out.println( "Referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored! Exception: "
+                                + i.getMessage() );
         }
+        return null;
     }
 
-    private static void parseList( ArrayList<QName> properties, List<String> list ) {
+    private void parseList( ArrayList<QName> properties, List<String> list ) {
         for ( String entry : list ) {
-            parseEntry( properties, entry );
+            try {
+                QName qName = QName.valueOf( entry );
+                properties.add( qName );
+            } catch ( IllegalArgumentException e ) {
+                System.out.println( "One line of referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored: "
+                                    + entry );
+            }
         }
-    }
-
-    private static void parseEntry( ArrayList<QName> properties, String entry ) {
-        String[] splitEntry = entry.split( "\",\"" );
-        if ( splitEntry.length == 2 ) {
-            String namespaceUri = splitEntry[0].replace( "\"", "" );
-            String localPart = splitEntry[1].replace( "\"", "" );
-            QName qName = new QName( namespaceUri, localPart );
-            properties.add( qName );
-        } else
-            System.out.println( "One line of referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored: "
-                                + entry );
     }
 
 }
