@@ -61,7 +61,7 @@ public class Exec {
     private static int srid = 4258; // uses EPSG:4258
     private static boolean useIntegerFids = true; // uses FIDMapping with integer type
     private static boolean relationalMapping = true; // generates relational mapping derived from GML application schema
-    private static String dialect = "postgis"; // generates mapping for PostGIS dialect
+    private static SQLDialect sqlDialect = instantiateDialect( null );  // generates mapping for PostGIS dialect (per default)
 
     public static void main(String[] args) throws Exception 
     {
@@ -106,7 +106,8 @@ public class Exec {
             }
             else if (arg.startsWith("--dialect"))
             {
-                dialect = arg.split("=")[1];
+                String dialect = arg.split("=")[1];
+                sqlDialect = instantiateDialect( dialect );
                 System.out.println("Using dialect="+dialect);
             }
             else
@@ -121,7 +122,7 @@ public class Exec {
         
         CRSRef storageCrs = CRSManager.getCRSRef( "EPSG:" + String.valueOf(srid) );
         GeometryStorageParams geometryParams = new GeometryStorageParams( storageCrs, String.valueOf(srid), DIM_2 );
-        AppSchemaMapper mapper = new AppSchemaMapper( appSchema, !relationalMapping, relationalMapping, geometryParams, 64, true, useIntegerFids );
+        AppSchemaMapper mapper = new AppSchemaMapper( appSchema, !relationalMapping, relationalMapping, geometryParams, sqlDialect.getMaxColumnNameLength(), true, useIntegerFids );
         MappedAppSchema mappedSchema = mapper.getMappedSchema();
         SQLFeatureStoreConfigWriter configWriter = new SQLFeatureStoreConfigWriter( mappedSchema );
         String uriPathToSchema = new URI(schemaUrl).getPath();
@@ -145,7 +146,6 @@ public class Exec {
   }
 
     private static void writeSqlDdlFile(MappedAppSchema mappedSchema, String fileName) throws IOException {
-        SQLDialect sqlDialect = dialect.equalsIgnoreCase("oracle") ? new OracleDialect("",11,2) : new PostGISDialect("2.0.0");
         String[] createStmts = DDLCreator.newInstance( mappedSchema, sqlDialect).getDDL();
         String sqlOutputFilename = "./"+fileName+".sql";
         System.out.println( "Writing SQL DDL into file: " + sqlOutputFilename);
@@ -168,4 +168,11 @@ public class Exec {
         xmlWriter.close();
         Files.write(Paths.get(xmlOutputFilename), bos.toString().getBytes(StandardCharsets.UTF_8) );
     }
+
+    private static SQLDialect instantiateDialect( String dialect ) {
+        if ( dialect != null && "oracle".equalsIgnoreCase( dialect ) )
+            return new OracleDialect( "", 11, 2 );
+        return new PostGISDialect( "2.0.0" );
+    }
+    
 }
