@@ -78,18 +78,22 @@ The generated file is './CadastralParcels.xml'. All properties listed in the ref
 
 ## Usage of option listOfPropertiesWithPrimitiveHref
 
-The option listOfPropertiesWithPrimitiveHref references a file listing properties which are written with primitive instead of feature mappings. This enables direct filtering on those properties with deegree. For example, filtering on INSPIRE codelist hrefs is possible then.
+The option listOfPropertiesWithPrimitiveHref references a file listing properties which are written with primitive instead of feature mappings.
+
+For example, in some INSPIRE themes codelists values are stored in xlink:href attributes. Corresponding to the GML appplication schema the type is a gml:ReferenceType. Usually deegree would handle this as feature mapping but it is recommended to use a primitive mapping here.
+
+Primitive mapping enables direct filtering on those properties with deegree. For example, filtering on INSPIRE codelist hrefs is possible then.
 
 Syntax of content of file:
 
-    "Namespace URI","local part"
+    {NamespaceURI}localPart
 
 If multiple properties shall use primitive mappings, they must be listed in new lines.
 
 Example:
 
-    "http://inspire.ec.europa.eu/schemas/gn/4.0","nativeness"
-    "http://inspire.ec.europa.eu/schemas/ps/4.0","designation"
+    {http://inspire.ec.europa.eu/schemas/gn/4.0}nativeness
+    {http://inspire.ec.europa.eu/schemas/ps/4.0}designation
 
 ## Behind http proxy
 
