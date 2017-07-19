@@ -1,4 +1,4 @@
-# deegree-cli-utility
+= deegree-cli-utility
 
 Command line utility based on [deegree3](https://github.com/deegree/deegree3) to generate `DDL` and `deegree SQLFeatureStore` from GML application schemas. 
 
@@ -9,7 +9,7 @@ You can download the latest release [here](https://github.com/lat-lon/deegree-cl
     git checkout deegree-3.4
     mvn clean package -Pjar-with-dependencies
 
-## Usage
+== Usage
 
 ```
 Usage: java -jar deegree-cli-utility.jar [options] schema_url
@@ -25,50 +25,50 @@ options:
 The SQL DDL and XML output is written into files in the current directory. The filename of each file is derived from the 
 schema file name in the given `schema_url`.
 
-### Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
+=== Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
 
     java -jar deegree-cli-utility.jar --srid=25832 --format=ddl --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
 The generated file is './CadastralParcels.sql'.    
 
-### Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
+=== Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
 
     java -jar deegree-cli-utility.jar --srid=25832 --format=deegree --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
     
 The generated file is './CadastralParcels.xml'.    
 
-### Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+=== Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
 
     java -jar deegree-cli-utility.jar --srid=25832 --format=ddl --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
 The generated file is './CadastralParcels.sql'.
 
-### Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+=== Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
 
     java -jar deegree-cli-utility.jar --srid=25832 --format=deegree --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
 The generated file is './CadastralParcels.xml'.
 
-### Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+=== Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
 
     java -jar deegree-cli-utility.jar --srid=25832 --format=all --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
 
-### Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with Blob-Mapping
+=== Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with Blob-Mapping
 
     java -jar deegree-cli-utility.jar --format=all --mapping=blob http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
     
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with Blob-Mapping for PostGIS.    
 
-### Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 for Oracle DBMS with Oracle Locator
+=== Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 for Oracle DBMS with Oracle Locator
 
     java -jar deegree-cli-utility.jar --format=all --dialect=oracle http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with relational mapping for Oracle Locator.
 
 
-## Behind http proxy
+== Behind http proxy
 
 Set the `http.proxyHost`, `http.proxyPort` and `http.nonProxyHosts` config properties.
 
