@@ -1,7 +1,5 @@
 # deegree-cli-utility
 
-[![Build Status](https://travis-ci.org/JuergenWeichand/deegree-cli-utility.svg?branch=master)](https://travis-ci.org/JuergenWeichand/deegree-cli-utility)
-
 Command line utility based on [deegree3](https://github.com/deegree/deegree3) to generate `DDL` and `deegree SQLFeatureStore` from GML application schemas. 
 
 You can download the latest release [here](https://github.com/lat-lon/deegree-cli-utility/releases) or build it yourself.
