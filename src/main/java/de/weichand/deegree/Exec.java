@@ -58,115 +58,106 @@ public class Exec {
 
     // default values
     private static String format = "deegree"; // generates deegree SQLFeatureStore config file only
-    private static int srid = 4258; // uses EPSG:4258
-    private static boolean useIntegerFids = true; // uses FIDMapping with integer type
-    private static boolean relationalMapping = true; // generates relational mapping derived from GML application schema
-    private static SQLDialect sqlDialect = instantiateDialect( null );  // generates mapping for PostGIS dialect (per default)
 
-    public static void main(String[] args) throws Exception 
-    {
-        
-        if (args.length == 0) 
-        {
-            System.out.println("Usage: java -jar deegree-cli-utility.jar [options] schema_url");
-            System.out.println("");
-            System.out.println("options:");
-            System.out.println(" --format={deegree|ddl|all}");
-            System.out.println(" --srid=<epsg_code>");
-            System.out.println(" --idtype={int|uuid}");
-            System.out.println(" --mapping={relational|blob}");
-            System.out.println(" --dialect={postgis|oracle}");
+    private static int srid = 4258; // uses EPSG:4258
+
+    private static boolean useIntegerFids = true; // uses FIDMapping with integer type
+
+    private static boolean relationalMapping = true; // generates relational mapping derived from GML application schema
+
+    private static SQLDialect sqlDialect = instantiateDialect( null ); // generates mapping for PostGIS dialect (per
+                                                                       // default)
+
+    public static void main( String[] args )
+                            throws Exception {
+
+        if ( args.length == 0 ) {
+            System.out.println( "Usage: java -jar deegree-cli-utility.jar [options] schema_url" );
+            System.out.println( "" );
+            System.out.println( "options:" );
+            System.out.println( " --format={deegree|ddl|all}" );
+            System.out.println( " --srid=<epsg_code>" );
+            System.out.println( " --idtype={int|uuid}" );
+            System.out.println( " --mapping={relational|blob}" );
+            System.out.println( " --dialect={postgis|oracle}" );
             return;
         }
-        
+
         String schemaUrl = "";
-        for (String arg : args) 
-        {
-            if (arg.startsWith("--format")) 
-            {
-                format = arg.split("=")[1];
-                System.out.println("Using format="+format);
-            }
-            else if (arg.startsWith("--srid")) 
-            {
-                srid = Integer.valueOf(arg.split("=")[1]);
-                System.out.println("Using srid="+srid);
-            }
-            else if (arg.startsWith("--idtype"))
-            {
-                String idMappingArg = arg.split("=")[1];
+        for ( String arg : args ) {
+            if ( arg.startsWith( "--format" ) ) {
+                format = arg.split( "=" )[1];
+                System.out.println( "Using format=" + format );
+            } else if ( arg.startsWith( "--srid" ) ) {
+                srid = Integer.valueOf( arg.split( "=" )[1] );
+                System.out.println( "Using srid=" + srid );
+            } else if ( arg.startsWith( "--idtype" ) ) {
+                String idMappingArg = arg.split( "=" )[1];
                 useIntegerFids = idMappingArg.equals( "uuid" ) ? false : true;
-                System.out.println("Using idtype="+idMappingArg);
-            }
-            else if (arg.startsWith("--mapping"))
-            {
-                String mapping = arg.split("=")[1];
-                relationalMapping = mapping.equalsIgnoreCase("blob") ? false : true;
-                System.out.println("Using mapping="+mapping);
-            }
-            else if (arg.startsWith("--dialect"))
-            {
-                String dialect = arg.split("=")[1];
+                System.out.println( "Using idtype=" + idMappingArg );
+            } else if ( arg.startsWith( "--mapping" ) ) {
+                String mapping = arg.split( "=" )[1];
+                relationalMapping = mapping.equalsIgnoreCase( "blob" ) ? false : true;
+                System.out.println( "Using mapping=" + mapping );
+            } else if ( arg.startsWith( "--dialect" ) ) {
+                String dialect = arg.split( "=" )[1];
                 sqlDialect = instantiateDialect( dialect );
-                System.out.println("Using dialect="+dialect);
-            }
-            else
-            {
+                System.out.println( "Using dialect=" + dialect );
+            } else {
                 schemaUrl = arg;
             }
         }
-        
+
         String[] schemaUrls = { schemaUrl };
-        GMLAppSchemaReader xsdDecoder = new GMLAppSchemaReader(null, null, schemaUrls);
+        GMLAppSchemaReader xsdDecoder = new GMLAppSchemaReader( null, null, schemaUrls );
         AppSchema appSchema = xsdDecoder.extractAppSchema();
-        
-        CRSRef storageCrs = CRSManager.getCRSRef( "EPSG:" + String.valueOf(srid) );
-        GeometryStorageParams geometryParams = new GeometryStorageParams( storageCrs, String.valueOf(srid), DIM_2 );
-        AppSchemaMapper mapper = new AppSchemaMapper( appSchema, !relationalMapping, relationalMapping, geometryParams, sqlDialect.getMaxColumnNameLength(), true, useIntegerFids );
+
+        CRSRef storageCrs = CRSManager.getCRSRef( "EPSG:" + String.valueOf( srid ) );
+        GeometryStorageParams geometryParams = new GeometryStorageParams( storageCrs, String.valueOf( srid ), DIM_2 );
+        AppSchemaMapper mapper = new AppSchemaMapper( appSchema, !relationalMapping, relationalMapping, geometryParams,
+                                                      sqlDialect.getMaxColumnNameLength(), true, useIntegerFids );
         MappedAppSchema mappedSchema = mapper.getMappedSchema();
         SQLFeatureStoreConfigWriter configWriter = new SQLFeatureStoreConfigWriter( mappedSchema );
-        String uriPathToSchema = new URI(schemaUrl).getPath();
-        String schemaFileName = uriPathToSchema.substring(uriPathToSchema.lastIndexOf('/') + 1);
-        String fileName = schemaFileName.replaceFirst("[.][^.]+$", "");
+        String uriPathToSchema = new URI( schemaUrl ).getPath();
+        String schemaFileName = uriPathToSchema.substring( uriPathToSchema.lastIndexOf( '/' ) + 1 );
+        String fileName = schemaFileName.replaceFirst( "[.][^.]+$", "" );
 
-        if (format.equals("all"))
-        {
-            writeSqlDdlFile(mappedSchema, fileName);
-            writeXmlConfigFile(schemaUrls, configWriter, fileName);
-        }
-        else if (format.equals("deegree"))
-        {
-            writeXmlConfigFile(schemaUrls, configWriter, fileName);
-        }
-        else if (format.equals("ddl"))
-        {
-            writeSqlDdlFile(mappedSchema, fileName);
+        if ( format.equals( "all" ) ) {
+            writeSqlDdlFile( mappedSchema, fileName );
+            writeXmlConfigFile( schemaUrls, configWriter, fileName );
+        } else if ( format.equals( "deegree" ) ) {
+            writeXmlConfigFile( schemaUrls, configWriter, fileName );
+        } else if ( format.equals( "ddl" ) ) {
+            writeSqlDdlFile( mappedSchema, fileName );
         }
 
-  }
+    }
 
-    private static void writeSqlDdlFile(MappedAppSchema mappedSchema, String fileName) throws IOException {
-        String[] createStmts = DDLCreator.newInstance( mappedSchema, sqlDialect).getDDL();
-        String sqlOutputFilename = "./"+fileName+".sql";
-        System.out.println( "Writing SQL DDL into file: " + sqlOutputFilename);
-        Path pathToSqlOutputFile = Paths.get(sqlOutputFilename);
-        try (BufferedWriter writer = Files.newBufferedWriter(pathToSqlOutputFile)) {
-            for (String sqlStatement: createStmts) {
-                writer.write(sqlStatement+";"+System.getProperty("line.separator"));
+    private static void writeSqlDdlFile( MappedAppSchema mappedSchema, String fileName )
+                            throws IOException {
+        String[] createStmts = DDLCreator.newInstance( mappedSchema, sqlDialect ).getDDL();
+        String sqlOutputFilename = "./" + fileName + ".sql";
+        System.out.println( "Writing SQL DDL into file: " + sqlOutputFilename );
+        Path pathToSqlOutputFile = Paths.get( sqlOutputFilename );
+        try (BufferedWriter writer = Files.newBufferedWriter( pathToSqlOutputFile )) {
+            for ( String sqlStatement : createStmts ) {
+                writer.write( sqlStatement + ";" + System.getProperty( "line.separator" ) );
             }
         }
     }
 
-    private static void writeXmlConfigFile(String[] schemaUrls, SQLFeatureStoreConfigWriter configWriter, String fileName) throws XMLStreamException, IOException {
-        List<String> configUrls = Arrays.asList(schemaUrls);
-        String xmlOutputFilename = "./"+fileName+".xml";
-        System.out.println( "Writing deegree SQLFeatureStore configuration into file: " + xmlOutputFilename);
+    private static void writeXmlConfigFile( String[] schemaUrls, SQLFeatureStoreConfigWriter configWriter,
+                                            String fileName )
+                            throws XMLStreamException, IOException {
+        List<String> configUrls = Arrays.asList( schemaUrls );
+        String xmlOutputFilename = "./" + fileName + ".xml";
+        System.out.println( "Writing deegree SQLFeatureStore configuration into file: " + xmlOutputFilename );
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         XMLStreamWriter xmlWriter = XMLOutputFactory.newInstance().createXMLStreamWriter( bos );
         xmlWriter = new IndentingXMLStreamWriter( xmlWriter );
-        configWriter.writeConfig( xmlWriter, fileName+"DS", configUrls );
+        configWriter.writeConfig( xmlWriter, fileName + "DS", configUrls );
         xmlWriter.close();
-        Files.write(Paths.get(xmlOutputFilename), bos.toString().getBytes(StandardCharsets.UTF_8) );
+        Files.write( Paths.get( xmlOutputFilename ), bos.toString().getBytes( StandardCharsets.UTF_8 ) );
     }
 
     private static SQLDialect instantiateDialect( String dialect ) {
@@ -174,5 +165,5 @@ public class Exec {
             return new OracleDialect( "", 11, 2 );
         return new PostGISDialect( "2.0.0" );
     }
-    
+
 }
