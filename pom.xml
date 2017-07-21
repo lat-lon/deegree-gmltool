@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.deegree-enterprise</groupId>
     <artifactId>deegree-tools-featurestore-sql</artifactId>
-    <version>1.0-pre3-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <inceptionYear>2016</inceptionYear>
@@ -41,7 +41,7 @@
         <connection>scm:git:git@github.com:deegree-enterprise/deegree-core.git</connection>
         <developerConnection>scm:git:git@github.com:deegree-enterprise/deegree-core.git</developerConnection>
         <url>https://github.com/deegree-enterprise/deegree-core</url>
-        <tag>HEAD</tag>
+        <tag>deegree-tools-featurestore-sql-1.0</tag>
     </scm>
 
     <properties>
