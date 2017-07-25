@@ -145,7 +145,7 @@ public class Exec {
         AppSchemaMapper mapper = new AppSchemaMapper( appSchema, !relationalMapping, relationalMapping, geometryParams,
                                                       sqlDialect.getMaxColumnNameLength(), true, useIntegerFids );
         MappedAppSchema mappedSchema = mapper.getMappedSchema();
-        SQLFeatureStoreConfigWriter configWriter = new SQLFeatureStoreConfigWriter( mappedSchema );
+        SQLFeatureStoreConfigWriter configWriter = new SQLFeatureStoreConfigWriter( mappedSchema, propertiesWithPrimitiveHref );
         String uriPathToSchema = new URI(schemaUrl).getPath();
         String schemaFileName = uriPathToSchema.substring(uriPathToSchema.lastIndexOf('/') + 1);
         String fileName = schemaFileName.replaceFirst("[.][^.]+$", "");
