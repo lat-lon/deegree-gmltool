@@ -6,10 +6,13 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.PathResource;
 
 /**
  * Configuration of the GMLLoader.
@@ -26,9 +29,12 @@ public class GmlLoaderConfiguration {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
+    @StepScope
     @Bean
-    public GmlReader gmlReader() {
-        return new GmlReader();
+    public GmlReader gmlReader( @Value("#{jobParameters[pathToFile]}") String pathToFile ) {
+        GmlReader gmlReader = new GmlReader();
+        gmlReader.setResource( new PathResource( pathToFile ) );
+        return gmlReader;
     }
 
     @Bean
