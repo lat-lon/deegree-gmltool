@@ -6,7 +6,7 @@ import org.deegree.commons.config.DeegreeWorkspace;
 import org.deegree.feature.Feature;
 import org.deegree.feature.persistence.FeatureStoreProvider;
 import org.deegree.feature.persistence.sql.SQLFeatureStore;
-import org.deegree.feature.persistence.sql.SqlFeatureStoreProvider;
+import org.deegree.protocol.wfs.transaction.action.IDGenMode;
 import org.deegree.workspace.Workspace;
 import org.slf4j.Logger;
 import org.springframework.batch.core.Job;
@@ -17,7 +17,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,8 +55,10 @@ public class GmlLoaderConfiguration {
 
     @StepScope
     @Bean
-    public FeatureStoreWriter featureStoreWriter(SQLFeatureStore sqlFeatureStore) {
-        return new FeatureStoreWriter( sqlFeatureStore);
+    public FeatureStoreWriter featureStoreWriter( SQLFeatureStore sqlFeatureStore,
+                                                  @Value("#{jobParameters[idGenMode]}") String idGenMode ) {
+        IDGenMode idGenModeValuue = parseIdGenMode( idGenMode );
+        return new FeatureStoreWriter( sqlFeatureStore, idGenModeValuue );
     }
 
     @StepScope
@@ -70,8 +71,8 @@ public class GmlLoaderConfiguration {
         LOG.info( "deegree workspace directory: [" + workspace.getLocation() + "] initialized" );
         Workspace newWorkspace = workspace.getNewWorkspace();
         SQLFeatureStore featureStore = (SQLFeatureStore) newWorkspace.getResource( FeatureStoreProvider.class,
-                                                                               sqlFeatureStoreId );
-        LOG.info( "SQLFeatureStore: [" + sqlFeatureStoreId + "] requested."  );
+                                                                                   sqlFeatureStoreId );
+        LOG.info( "SQLFeatureStore: [" + sqlFeatureStoreId + "] requested." );
         return featureStore;
     }
 
@@ -84,6 +85,16 @@ public class GmlLoaderConfiguration {
     public Job job( Step step )
                             throws Exception {
         return jobBuilderFactory.get( "job" ).incrementer( new RunIdIncrementer() ).start( step ).build();
+    }
+
+    private IDGenMode parseIdGenMode( String idGenMode ) {
+        if ( idGenMode == null )
+            return IDGenMode.GENERATE_NEW;
+        try {
+            return IDGenMode.valueOf( idGenMode );
+        } catch ( IllegalArgumentException e ) {
+            throw new IllegalArgumentException( "idGenMode must be one of " + IDGenMode.values() );
+        }
     }
 
 }

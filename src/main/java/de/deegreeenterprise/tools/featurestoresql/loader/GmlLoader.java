@@ -47,6 +47,13 @@ public class GmlLoader {
     }
 
     private static JobParameters createjobParameters( String[] args ) {
-        return new JobParametersBuilder().addString( "pathToFile", args[0] ).addString( "workspaceName", args[1] ).addString( "sqlFeatureStoreId", args[2] ).addDate( "startDate", new Date() ).toJobParameters();
+        String idGenMode = null;
+        if ( args.length > 3 )
+            idGenMode = args[3];
+        return new JobParametersBuilder().addString( "pathToFile", args[0] )
+                                         .addString( "workspaceName", args[1] )
+                                         .addString( "sqlFeatureStoreId", args[2] )
+                                         .addString( "idGenMode", idGenMode )
+                                         .addDate( "startDate", new Date() ).toJobParameters();
     }
 }

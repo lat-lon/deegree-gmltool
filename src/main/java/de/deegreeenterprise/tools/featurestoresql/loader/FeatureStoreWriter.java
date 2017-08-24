@@ -1,6 +1,5 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
-import static org.deegree.protocol.wfs.transaction.action.IDGenMode.GENERATE_NEW;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.List;
@@ -10,6 +9,7 @@ import org.deegree.feature.FeatureCollection;
 import org.deegree.feature.GenericFeatureCollection;
 import org.deegree.feature.persistence.sql.SQLFeatureStore;
 import org.deegree.feature.persistence.sql.SQLFeatureStoreTransaction;
+import org.deegree.protocol.wfs.transaction.action.IDGenMode;
 import org.slf4j.Logger;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.util.Assert;
@@ -25,13 +25,19 @@ public class FeatureStoreWriter implements ItemWriter<Feature> {
 
     private SQLFeatureStore sqlFeatureStore;
 
+    private final IDGenMode idGenMode;
+
     /**
      * @param sqlFeatureStore
      *            SQLFeatureStore to insert the features, never <code>null</code>
+     * @param idGenMode
+     *            the id generation mode to use for insert, never <code>null</code>
      */
-    public FeatureStoreWriter( SQLFeatureStore sqlFeatureStore ) {
+    public FeatureStoreWriter( SQLFeatureStore sqlFeatureStore, IDGenMode idGenMode ) {
         Assert.notNull( sqlFeatureStore, "sqlFeatureStore  must not be null" );
+        Assert.notNull( idGenMode, "idGenMode  must not be null" );
         this.sqlFeatureStore = sqlFeatureStore;
+        this.idGenMode = idGenMode;
     }
 
     @Override
@@ -46,6 +52,6 @@ public class FeatureStoreWriter implements ItemWriter<Feature> {
         }
         LOG.info( "Write " + featureCollection.size() + " features" );
         SQLFeatureStoreTransaction transaction = (SQLFeatureStoreTransaction) sqlFeatureStore.getTransaction();
-        transaction.performInsert( featureCollection, GENERATE_NEW );
+        transaction.performInsert( featureCollection, idGenMode );
     }
 }
