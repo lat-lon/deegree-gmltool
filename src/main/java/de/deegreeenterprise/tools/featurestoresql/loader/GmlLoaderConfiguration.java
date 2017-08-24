@@ -1,6 +1,14 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import org.deegree.commons.config.DeegreeWorkspace;
 import org.deegree.feature.Feature;
+import org.deegree.feature.persistence.FeatureStoreProvider;
+import org.deegree.feature.persistence.sql.SQLFeatureStore;
+import org.deegree.feature.persistence.sql.SqlFeatureStoreProvider;
+import org.deegree.workspace.Workspace;
+import org.slf4j.Logger;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -9,6 +17,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,11 +32,19 @@ import org.springframework.core.io.PathResource;
 @EnableBatchProcessing
 public class GmlLoaderConfiguration {
 
+    private static final Logger LOG = getLogger( GmlLoaderConfiguration.class );
+
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
 
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
+
+    @StepScope
+    @Bean
+    public TransactionHandler transactionHandler( SQLFeatureStore sqlFeatureStore ) {
+        return new TransactionHandler( sqlFeatureStore );
+    }
 
     @StepScope
     @Bean
@@ -37,14 +54,30 @@ public class GmlLoaderConfiguration {
         return gmlReader;
     }
 
+    @StepScope
     @Bean
-    public FeatureStoreWriter featureStoreWriter() {
-        return new FeatureStoreWriter();
+    public FeatureStoreWriter featureStoreWriter(SQLFeatureStore sqlFeatureStore) {
+        return new FeatureStoreWriter( sqlFeatureStore);
+    }
+
+    @StepScope
+    @Bean
+    public SQLFeatureStore sqlFeatureStore( @Value("#{jobParameters[workspaceName]}") String workspaceName,
+                                            @Value("#{jobParameters[sqlFeatureStoreId]}") String sqlFeatureStoreId )
+                            throws Exception {
+        DeegreeWorkspace workspace = DeegreeWorkspace.getInstance( workspaceName );
+        workspace.initAll();
+        LOG.info( "deegree workspace directory: [" + workspace.getLocation() + "] initialized" );
+        Workspace newWorkspace = workspace.getNewWorkspace();
+        SQLFeatureStore featureStore = (SQLFeatureStore) newWorkspace.getResource( FeatureStoreProvider.class,
+                                                                               sqlFeatureStoreId );
+        LOG.info( "SQLFeatureStore: [" + sqlFeatureStoreId + "] requested."  );
+        return featureStore;
     }
 
     @Bean
-    public Step step( GmlReader gmlReader, FeatureStoreWriter featureStoreWriter ) {
-        return stepBuilderFactory.get( "step" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).writer( featureStoreWriter ).build();
+    public Step step( TransactionHandler transactionHandler, GmlReader gmlReader, FeatureStoreWriter featureStoreWriter ) {
+        return stepBuilderFactory.get( "step" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).writer( featureStoreWriter ).listener( transactionHandler ).build();
     }
 
     @Bean
@@ -52,4 +85,5 @@ public class GmlLoaderConfiguration {
                             throws Exception {
         return jobBuilderFactory.get( "job" ).incrementer( new RunIdIncrementer() ).start( step ).build();
     }
+
 }
