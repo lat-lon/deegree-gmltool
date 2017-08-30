@@ -34,4 +34,25 @@ public class GmlReaderTest {
         assertThat( numberOfFeatures, is( 5 ) );
     }
 
+    @Test
+    public void testRead_unresolvableReferences()
+                            throws Exception {
+        GmlReader gmlReader = new GmlReader();
+        Resource resource = new InputStreamResource(
+                                                     GmlReaderTest.class.getResourceAsStream( "cadastralzonings-withUnresolvableReferences.xml" ) );
+        gmlReader.setResource( resource );
+        gmlReader.open( new ExecutionContext() );
+
+        int numberOfFeatures = 0;
+        Feature feature;
+        do {
+            feature = gmlReader.read();
+            if ( feature != null ) {
+                numberOfFeatures++;
+            }
+        } while ( feature != null );
+
+        assertThat( numberOfFeatures, is( 3 ) );
+    }
+
 }
