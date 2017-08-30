@@ -312,12 +312,20 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <!--  test -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <version>4.3.3.RELEASE</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.batch</groupId>
+      <artifactId>spring-batch-test</artifactId>
+      <version>3.0.8.RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <distributionManagement>

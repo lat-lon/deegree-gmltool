@@ -55,6 +55,12 @@ public class GmlLoaderConfiguration {
 
     @StepScope
     @Bean
+    public FeatureReferencesParser featureReferencesParser() {
+        return new FeatureReferencesParser();
+    }
+
+    @StepScope
+    @Bean
     public FeatureStoreWriter featureStoreWriter( SQLFeatureStore sqlFeatureStore,
                                                   @Value("#{jobParameters[idGenMode]}") String idGenMode ) {
         IDGenMode idGenModeValuue = parseIdGenMode( idGenMode );
@@ -77,8 +83,9 @@ public class GmlLoaderConfiguration {
     }
 
     @Bean
-    public Step step( TransactionHandler transactionHandler, GmlReader gmlReader, FeatureStoreWriter featureStoreWriter ) {
-        return stepBuilderFactory.get( "step" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).writer( featureStoreWriter ).listener( transactionHandler ).build();
+    public Step step( TransactionHandler transactionHandler, GmlReader gmlReader,
+                      FeatureReferencesParser featureReferencesParser, FeatureStoreWriter featureStoreWriter ) {
+        return stepBuilderFactory.get( "step" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).writer( featureStoreWriter ).listener( transactionHandler ).build();
     }
 
     @Bean
