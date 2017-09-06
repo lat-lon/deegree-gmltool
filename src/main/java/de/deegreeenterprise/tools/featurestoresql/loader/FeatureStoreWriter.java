@@ -50,8 +50,10 @@ public class FeatureStoreWriter implements ItemWriter<Feature> {
             LOG.info( "Add feature to write " + ( (Feature) feature ).getId() );
             featureCollection.add( featureToAdd );
         }
-        LOG.info( "Write " + featureCollection.size() + " features" );
+        LOG.info( "Try to write " + featureCollection.size() + " features" );
         SQLFeatureStoreTransaction transaction = (SQLFeatureStoreTransaction) sqlFeatureStore.getTransaction();
         transaction.performInsert( featureCollection, idGenMode );
+        LOG.info( "Insert performed." );
     }
+
 }
