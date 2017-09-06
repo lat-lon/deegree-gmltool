@@ -1,8 +1,12 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
+import static de.deegreeenterprise.tools.featurestoresql.loader.FeatureReferencesParser.FEATURE_IDS;
+import static de.deegreeenterprise.tools.featurestoresql.loader.FeatureReferencesParser.REFERENCE_IDS;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.batch.core.ExitStatus.COMPLETED;
 import static org.springframework.batch.core.ExitStatus.FAILED;
+
+import java.util.List;
 
 import org.deegree.feature.persistence.FeatureStoreException;
 import org.deegree.feature.persistence.sql.SQLFeatureStore;
@@ -44,15 +48,31 @@ public class TransactionHandler implements StepExecutionListener {
         } catch ( Exception e ) {
             throw new RuntimeException( "Transaction could not acquired!", e );
         }
-
     }
 
     @Override
     public ExitStatus afterStep( StepExecution stepExecution ) {
         if ( featureStoreTransaction != null )
-            return commitOrRollback( stepExecution, featureStoreTransaction );
+            return checkReferencesAndCommitOrRollback( stepExecution );
         return FAILED;
+    }
 
+    private ExitStatus checkReferencesAndCommitOrRollback( StepExecution stepExecution ) {
+        FeatureReferenceCheckResult featureReferenceCheckResult = checkReferences( stepExecution );
+        if ( featureReferenceCheckResult.isValid() ) {
+            return commitOrRollback( stepExecution, featureStoreTransaction );
+        } else {
+            logResult( featureReferenceCheckResult );
+            rollback();
+            return new ExitStatus( "FAILED", "Unresolvable References!" );
+        }
+    }
+
+    private FeatureReferenceCheckResult checkReferences( StepExecution stepExecution ) {
+        List<String> featureIds = (List<String>) stepExecution.getExecutionContext().get( FEATURE_IDS );
+        List<String> referenceIds = (List<String>) stepExecution.getExecutionContext().get( REFERENCE_IDS );
+        FeatureReferenceChecker featureReferenceChecker = new FeatureReferenceChecker();
+        return featureReferenceChecker.checkReferences( featureIds, referenceIds );
     }
 
     private ExitStatus commitOrRollback( StepExecution stepExecution, SQLFeatureStoreTransaction transaction ) {
@@ -70,6 +90,22 @@ public class TransactionHandler implements StepExecutionListener {
             LOG.error( "Could not commit/rollback the transaction.", e );
             return FAILED;
         }
+    }
+
+    private void rollback() {
+        try {
+            LOG.info( "Rollback transaction." );
+            featureStoreTransaction.rollback();
+        } catch ( FeatureStoreException e ) {
+            LOG.error( "Could not rollback the transaction.", e );
+        }
+    }
+
+    private void logResult( FeatureReferenceCheckResult featureReferenceCheckResult ) {
+        List<String> unresolvableReferences = featureReferenceCheckResult.getUnresolvableReferences();
+        LOG.info( "Unresolvable references detected:" );
+        for ( String unresolvableReference : unresolvableReferences )
+            LOG.info( "   - {}", unresolvableReference );
     }
 
 }
