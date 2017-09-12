@@ -1,12 +1,9 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 import org.deegree.commons.config.DeegreeWorkspace;
 import org.deegree.feature.Feature;
 import org.deegree.feature.persistence.FeatureStoreProvider;
 import org.deegree.feature.persistence.sql.SQLFeatureStore;
-import org.deegree.protocol.wfs.transaction.action.IDGenMode;
 import org.deegree.workspace.Workspace;
 import org.slf4j.Logger;
 import org.springframework.batch.core.Job;
@@ -21,6 +18,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.PathResource;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Configuration of the GMLLoader.
@@ -61,10 +60,8 @@ public class GmlLoaderConfiguration {
 
     @StepScope
     @Bean
-    public FeatureStoreWriter featureStoreWriter( SQLFeatureStore sqlFeatureStore,
-                                                  @Value("#{jobParameters[idGenMode]}") String idGenMode ) {
-        IDGenMode idGenModeValuue = parseIdGenMode( idGenMode );
-        return new FeatureStoreWriter( sqlFeatureStore, idGenModeValuue );
+    public FeatureStoreWriter featureStoreWriter( SQLFeatureStore sqlFeatureStore ) {
+        return new FeatureStoreWriter( sqlFeatureStore );
     }
 
     @StepScope
@@ -85,23 +82,15 @@ public class GmlLoaderConfiguration {
     @Bean
     public Step step( TransactionHandler transactionHandler, GmlReader gmlReader,
                       FeatureReferencesParser featureReferencesParser, FeatureStoreWriter featureStoreWriter ) {
-        return stepBuilderFactory.get( "step" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).writer( featureStoreWriter ).listener( transactionHandler ).build();
+        return stepBuilderFactory.get( "step" ).<Feature, Feature>chunk( 10 ).reader( gmlReader ).processor(
+                                featureReferencesParser ).writer( featureStoreWriter ).listener(
+                                transactionHandler ).build();
     }
 
     @Bean
     public Job job( Step step )
                             throws Exception {
         return jobBuilderFactory.get( "job" ).incrementer( new RunIdIncrementer() ).start( step ).build();
-    }
-
-    private IDGenMode parseIdGenMode( String idGenMode ) {
-        if ( idGenMode == null )
-            return IDGenMode.GENERATE_NEW;
-        try {
-            return IDGenMode.valueOf( idGenMode );
-        } catch ( IllegalArgumentException e ) {
-            throw new IllegalArgumentException( "idGenMode must be one of " + IDGenMode.values() );
-        }
     }
 
 }

@@ -1,22 +1,22 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.util.List;
-
 import org.deegree.feature.Feature;
 import org.deegree.feature.FeatureCollection;
 import org.deegree.feature.GenericFeatureCollection;
 import org.deegree.feature.persistence.sql.SQLFeatureStore;
 import org.deegree.feature.persistence.sql.SQLFeatureStoreTransaction;
-import org.deegree.protocol.wfs.transaction.action.IDGenMode;
 import org.slf4j.Logger;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
+import static org.deegree.protocol.wfs.transaction.action.IDGenMode.USE_EXISTING;
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Inserts Feature in the SQLFeatureStore.
- * 
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class FeatureStoreWriter implements ItemWriter<Feature> {
@@ -25,19 +25,13 @@ public class FeatureStoreWriter implements ItemWriter<Feature> {
 
     private SQLFeatureStore sqlFeatureStore;
 
-    private final IDGenMode idGenMode;
-
     /**
      * @param sqlFeatureStore
-     *            SQLFeatureStore to insert the features, never <code>null</code>
-     * @param idGenMode
-     *            the id generation mode to use for insert, never <code>null</code>
+     *                         SQLFeatureStore to insert the features, never <code>null</code>
      */
-    public FeatureStoreWriter( SQLFeatureStore sqlFeatureStore, IDGenMode idGenMode ) {
+    public FeatureStoreWriter( SQLFeatureStore sqlFeatureStore ) {
         Assert.notNull( sqlFeatureStore, "sqlFeatureStore  must not be null" );
-        Assert.notNull( idGenMode, "idGenMode  must not be null" );
         this.sqlFeatureStore = sqlFeatureStore;
-        this.idGenMode = idGenMode;
     }
 
     @Override
@@ -52,7 +46,7 @@ public class FeatureStoreWriter implements ItemWriter<Feature> {
         }
         LOG.info( "Try to write " + featureCollection.size() + " features" );
         SQLFeatureStoreTransaction transaction = (SQLFeatureStoreTransaction) sqlFeatureStore.getTransaction();
-        transaction.performInsert( featureCollection, idGenMode );
+        transaction.performInsert( featureCollection, USE_EXISTING );
         LOG.info( "Insert performed." );
     }
 
