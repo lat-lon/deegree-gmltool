@@ -44,6 +44,7 @@ public class TransactionHandler implements StepExecutionListener {
     public void beforeStep( StepExecution stepExecution ) {
         try {
             this.featureStoreTransaction = (SQLFeatureStoreTransaction) this.sqlFeatureStore.acquireTransaction();
+            this.featureStoreTransaction.setHandleReferencesAsResolved( true );
             LOG.info( "Acquired transaction." );
         } catch ( Exception e ) {
             throw new RuntimeException( "Transaction could not acquired!", e );
