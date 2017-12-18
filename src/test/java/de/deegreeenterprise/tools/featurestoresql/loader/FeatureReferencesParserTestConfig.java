@@ -36,7 +36,7 @@ public class FeatureReferencesParserTestConfig {
     @StepScope
     @Bean
     public GmlReader gmlReader( @Value("#{jobParameters[pathToFile]}") String pathToFile ) {
-        GmlReader gmlReader = new GmlReader();
+        GmlReader gmlReader = new GmlReader( null );
         gmlReader.setResource( new PathResource( pathToFile ) );
         return gmlReader;
     }

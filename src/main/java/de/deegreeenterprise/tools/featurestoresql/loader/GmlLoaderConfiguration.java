@@ -1,5 +1,7 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import org.deegree.commons.config.DeegreeWorkspace;
 import org.deegree.feature.Feature;
 import org.deegree.feature.persistence.FeatureStoreProvider;
@@ -18,8 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.PathResource;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Configuration of the GMLLoader.
@@ -46,8 +46,9 @@ public class GmlLoaderConfiguration {
 
     @StepScope
     @Bean
-    public GmlReader gmlReader( @Value("#{jobParameters[pathToFile]}") String pathToFile ) {
-        GmlReader gmlReader = new GmlReader();
+    public GmlReader gmlReader( SQLFeatureStore sqlFeatureStore,
+                                @Value("#{jobParameters[pathToFile]}") String pathToFile ) {
+        GmlReader gmlReader = new GmlReader( sqlFeatureStore );
         gmlReader.setResource( new PathResource( pathToFile ) );
         return gmlReader;
     }

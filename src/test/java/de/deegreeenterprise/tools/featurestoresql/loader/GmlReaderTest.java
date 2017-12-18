@@ -17,7 +17,7 @@ public class GmlReaderTest {
     @Test
     public void testRead()
                             throws Exception {
-        GmlReader gmlReader = new GmlReader();
+        GmlReader gmlReader = new GmlReader( null );
         Resource resource = new InputStreamResource( GmlReaderTest.class.getResourceAsStream( "cadastralparcels.xml" ) );
         gmlReader.setResource( resource );
         gmlReader.open( new ExecutionContext() );
@@ -37,7 +37,7 @@ public class GmlReaderTest {
     @Test
     public void testRead_unresolvableReferences()
                             throws Exception {
-        GmlReader gmlReader = new GmlReader();
+        GmlReader gmlReader = new GmlReader( null );
         Resource resource = new InputStreamResource(
                                                      GmlReaderTest.class.getResourceAsStream( "cadastralzonings-withUnresolvableReferences.xml" ) );
         gmlReader.setResource( resource );

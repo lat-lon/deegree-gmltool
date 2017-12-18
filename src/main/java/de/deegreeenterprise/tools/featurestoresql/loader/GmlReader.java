@@ -9,6 +9,8 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.deegree.commons.xml.stax.XMLStreamReaderWrapper;
 import org.deegree.feature.Feature;
+import org.deegree.feature.persistence.sql.SQLFeatureStore;
+import org.deegree.feature.types.AppSchema;
 import org.deegree.gml.GMLInputFactory;
 import org.deegree.gml.GMLStreamReader;
 import org.deegree.gml.GMLVersion;
@@ -30,6 +32,8 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
 
     private static final Logger LOG = getLogger( GmlReader.class );
 
+    private final SQLFeatureStore sqlFeatureStore;
+
     private Resource resource;
 
     private InputStream inputStream;
@@ -37,6 +41,16 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
     private XMLStreamReader xmlStreamReader;
 
     private StreamFeatureCollection featureStream;
+
+    private int noOfFeaturesRead = 0;
+
+    /**
+     * @param sqlFeatureStore
+     *            the {@link SQLFeatureStore} used for insert, may be <code>null</code>
+     */
+    public GmlReader( SQLFeatureStore sqlFeatureStore ) {
+        this.sqlFeatureStore = sqlFeatureStore;
+    }
 
     @Override
     public void setResource( Resource resource ) {
@@ -51,7 +65,7 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
         }
         Feature feature = this.featureStream.read();
         if ( feature != null )
-            LOG.info( "Read feature with id " + feature.getId() );
+            LOG.info( "Read feature with id " + feature.getId() + " (number " + ++noOfFeaturesRead + ") " );
         return feature;
     }
 
@@ -97,12 +111,18 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
             GMLVersion version = GMLVersion.GML_32;
             this.xmlStreamReader = XMLInputFactory.newFactory().createXMLStreamReader( this.inputStream );
             XMLStreamReaderWrapper xmlStream = new XMLStreamReaderWrapper( xmlStreamReader, null );
-
             GMLStreamReader gmlStreamReader = GMLInputFactory.createGMLStreamReader( version, xmlStream );
+            gmlStreamReader.setApplicationSchema( findSchema() );
             this.featureStream = gmlStreamReader.readFeatureCollectionStream();
         } catch ( Exception e ) {
             throw new ItemStreamException( "Failed to initialize the reader", e );
         }
+    }
+
+    private AppSchema findSchema() {
+        if ( sqlFeatureStore != null )
+            return sqlFeatureStore.getSchema();
+        return null;
     }
 
 }
