@@ -91,6 +91,7 @@
               <attributes>
                 <revdate>${revdate}</revdate>
                 <revnumber>${revnumber}</revnumber>
+                <tool-version>${project.version}</tool-version>
               </attributes>
               <sourceDirectory>${project.basedir}</sourceDirectory>
               <sourceDocumentName>README.adoc</sourceDocumentName>
@@ -111,6 +112,7 @@
                 <linkcss>false</linkcss>
                 <revdate>${revdate}</revdate>
                 <revnumber>${revnumber}</revnumber>
+                <tool-version>${project.version}</tool-version>
               </attributes>
               <sourceDirectory>${project.basedir}</sourceDirectory>
               <sourceDocumentName>README.adoc</sourceDocumentName>
