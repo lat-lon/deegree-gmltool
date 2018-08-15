@@ -20,6 +20,8 @@ Aennchenstraße 19 53177 Bonn +
 
 == Usage
 
+The command line interface can be found in the directory _software_ in the distribution bundle.
+
 [subs="attributes+"]
 ------------------------------
 Usage: java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar [options] schema_url
