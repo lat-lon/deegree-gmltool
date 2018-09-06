@@ -1,22 +1,8 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.util.Date;
-
-import org.slf4j.Logger;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * Entry point of the command line interface of the GMLLoader.
@@ -26,30 +12,34 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 public class GmlLoader {
 
-    private static final Logger LOG = getLogger( GmlLoader.class );
+    public static void main( String[] args ) {
+        SpringApplication app = new SpringApplication( GmlLoaderConfiguration.class );
+        app.setBannerMode( Banner.Mode.OFF );
 
-    public static void main( String[] args )
-                            throws Exception {
-        ConfigurableApplicationContext springContext = SpringApplication.run( GmlLoaderConfiguration.class, args );
-        try {
-            JobLauncher jobLauncher = springContext.getBean( "jobLauncher", JobLauncher.class );
-            Job job = springContext.getBean( "job", Job.class );
-            JobParameters jobParameters = createjobParameters( args );
-            LOG.info( "Starting job {} with following parameters {}", job.getName(), jobParameters.toString() );
-            JobExecution jobExecution = jobLauncher.run( job, jobParameters );
-            LOG.info( "Finished job {} with parameters {} with following status {}, exit status {} and batch status {}",
-                      job.getName(), jobParameters.toString(), jobExecution.getStatus().toString(),
-                      jobExecution.getExitStatus().toString(), jobExecution.getStatus().getBatchStatus().toString() );
-        } catch ( JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
-                                | JobParametersInvalidException e ) {
-            LOG.error( "An error occurred during executing the job.", e );
+        if ( args.length == 0 || "--help".equals( args[0] ) || "-".equals( args[0] ) ) {
+            printHelp();
+        } else if ( args.length != 3 ) {
+            printUnexpectedNumberOfParameters( args );
+            printHelp();
+        } else {
+            app.run( args );
         }
     }
 
-    private static JobParameters createjobParameters( String[] args ) {
-        return new JobParametersBuilder().addString( "pathToFile", args[0] )
-                                         .addString( "workspaceName", args[1] )
-                                         .addString( "sqlFeatureStoreId", args[2] )
-                                         .addDate( "startDate", new Date() ).toJobParameters();
+    private static void printHelp() {
+        System.out.println( "Import of GML to deegree WFS" );
+        System.out.println( "Expected parameters (in this order!):" );
+        System.out.println( "   <pathToFile> - the path to the GML file to import" );
+        System.out.println( "   <workspaceName> - the name of the deegree workspace used for the import. Must be located at DEEGREE_ROOT" );
+        System.out.println( "   <sqlFeatureStoreId> - the id of the SQLFeatureStore in the workspace" );
+        System.out.println();
+        System.out.println( "Example:" );
+        System.out.println( "pathToFile=/path/to/cadastralparcels.gml workspaceName=inspire sqlFeatureStoreId=cadastralparcels" );
     }
+
+    private static void printUnexpectedNumberOfParameters( String[] args ) {
+        System.out.println( "Number of arguments is invalid, must be exactly three but was " + args.length );
+        System.out.println();
+    }
+
 }
