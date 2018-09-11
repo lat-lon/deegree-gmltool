@@ -1,4 +1,4 @@
-package de.weichand.deegree;
+package de.deegreeenterprise.tools.featurestoresql.config;
 
 import java.io.IOException;
 import java.net.URI;

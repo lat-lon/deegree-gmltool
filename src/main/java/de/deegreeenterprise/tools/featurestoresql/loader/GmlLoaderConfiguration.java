@@ -14,12 +14,9 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.core.explore.JobExplorer;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.batch.JobLauncherCommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.PathResource;
@@ -40,12 +37,6 @@ public class GmlLoaderConfiguration {
 
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
-
-    @Autowired
-    private JobLauncher jobLauncher;
-
-    @Autowired
-    private JobExplorer jobExplorer;
 
     @StepScope
     @Bean
@@ -92,17 +83,12 @@ public class GmlLoaderConfiguration {
     @Bean
     public Step step( TransactionHandler transactionHandler, GmlReader gmlReader,
                       FeatureReferencesParser featureReferencesParser, FeatureStoreWriter featureStoreWriter ) {
-        return stepBuilderFactory.get( "step" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).writer( featureStoreWriter ).listener( transactionHandler ).build();
+        return stepBuilderFactory.get( "gmlLoaderStep" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).writer( featureStoreWriter ).listener( transactionHandler ).build();
     }
 
     @Bean
     public Job job( Step step ) {
-        return jobBuilderFactory.get( "job" ).incrementer( new RunIdIncrementer() ).start( step ).build();
-    }
-
-    @Bean
-    public JobLauncherCommandLineRunner runner() {
-        return new JobLauncherCommandLineRunner( jobLauncher, jobExplorer );
+        return jobBuilderFactory.get( "gmlLoaderJob" ).incrementer( new RunIdIncrementer() ).start( step ).build();
     }
 
 }
