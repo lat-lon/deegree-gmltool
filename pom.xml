@@ -50,7 +50,7 @@
     <revnumber>${project.version}</revnumber>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <deegree.version>1.0.1</deegree.version>
+    <deegree.version>1.2</deegree.version>
   </properties>
 
   <repositories>
