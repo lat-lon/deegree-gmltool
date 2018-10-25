@@ -105,6 +105,7 @@
               <attributes>
                 <revdate>${revdate}</revdate>
                 <revnumber>${revnumber}</revnumber>
+                <tool-version>${project.version}</tool-version>
               </attributes>
               <sourceDirectory>${project.basedir}</sourceDirectory>
               <sourceDocumentName>README.adoc</sourceDocumentName>
@@ -125,6 +126,7 @@
                 <linkcss>false</linkcss>
                 <revdate>${revdate}</revdate>
                 <revnumber>${revnumber}</revnumber>
+                <tool-version>${project.version}</tool-version>
               </attributes>
               <sourceDirectory>${project.basedir}</sourceDirectory>
               <sourceDocumentName>README.adoc</sourceDocumentName>
@@ -199,33 +201,8 @@
     </dependency>
     <dependency>
       <groupId>de.deegree-enterprise</groupId>
-      <artifactId>deegree-connectionprovider-datasource</artifactId>
-      <version>${deegree.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>jul-to-slf4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>de.deegree-enterprise</groupId>
       <artifactId>deegree-sqldialect-postgis</artifactId>
       <version>${deegree.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>jul-to-slf4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>de.deegree-enterprise</groupId>
