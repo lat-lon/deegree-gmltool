@@ -7,7 +7,9 @@
 
 = deegree-tools-featurestore-sql
 
-This documentation contains the description of the command line interface deegree-tools-featurestore-sql. The command line utility based on deegree to generate `DDL` and `deegree SQLFeatureStore` from GML application schemas.
+This documentation contains the description of the command line interface deegree-tools-featurestore-sql. The command line utilities based on deegree
+can generate SQL DDL scripts and deegree SQLFeatureStore configuration files from GML application schemas. Furthermore the command line supports a
+function to load a GML instance document directly into an existing deegree SQLFeatureStore.
 
 
 grit - graphische Informationstechnik - Beratungsgesellschaft mbH +
@@ -18,7 +20,7 @@ lat/lon - Gesellschaft für raumbezogene Informationssysteme mbH +
 info@lat-lon.de http://www.lat-lon.de/ +
 Aennchenstraße 19 53177 Bonn +
 
-== Usage
+== Usage FeatureStoreConfigLoader
 
 ```
 Usage: java -jar deegree-cli-utility.jar [options] schema_url
@@ -102,7 +104,19 @@ Example:
     {http://inspire.ec.europa.eu/schemas/gn/4.0}nativeness
     {http://inspire.ec.europa.eu/schemas/ps/4.0}designation
 
-== Behind http proxy
+== Usage GmlLoader
+
+[subs="attributes+"]
+------------------------------
+Usage: java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar GmlLoader [options]
+
+options:
+ --pathToFile=<path/to/gmlfile>, the path to the GML file to import
+ --workspaceName=<workspace_identifier>, the name of the deegree workspace used for the import. Must be located at default DEEGREE_WORKSPACE_ROOT directory
+ --sqlFeatureStoreId=<feature_store_identifier>, the ID of the SQLFeatureStore in the given workspace
+------------------------------
+
+== Using the CLI behind a http proxy
 
 Set the `http.proxyHost`, `http.proxyPort` and `http.nonProxyHosts` config properties.
 
