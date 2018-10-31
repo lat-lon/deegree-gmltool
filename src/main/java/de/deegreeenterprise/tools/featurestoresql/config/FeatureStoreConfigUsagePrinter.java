@@ -6,7 +6,7 @@ package de.deegreeenterprise.tools.featurestoresql.config;
 public class FeatureStoreConfigUsagePrinter {
 
     public static void printUsage() {
-        System.out.println( "Usage: java -jar deegree-tools-featurestore-sql.jar FeatureStoreConfigLoader -schema_url=<url-or-path/to/file> [options]" );
+        System.out.println( "Usage: java -jar deegree-tools-featurestore-sql.jar FeatureStoreConfigLoader -schemaUrl=<url-or-path/to/file> [options]" );
         System.out.println();
         System.out.println( "options:" );
         System.out.println( " -format={deegree|ddl|all}" );

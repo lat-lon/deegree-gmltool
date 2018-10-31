@@ -41,10 +41,10 @@ public class FeatureStoreWriter implements ItemWriter<Feature> {
         FeatureCollection featureCollection = new GenericFeatureCollection();
         for ( Object feature : features ) {
             Feature featureToAdd = (Feature) feature;
-            LOG.info( "Add feature to write " + ( (Feature) feature ).getId() );
+            LOG.info( "Adding feature with GML ID '"+featureToAdd.getId()+"' of type '"+featureToAdd.getType().getName()+"' to chunk" );
             featureCollection.add( featureToAdd );
         }
-        LOG.info( "Try to write " + featureCollection.size() + " features" );
+        LOG.info( "Trying to write " + featureCollection.size() + " features" );
         SQLFeatureStoreTransaction transaction = (SQLFeatureStoreTransaction) sqlFeatureStore.getTransaction();
         transaction.performInsert( featureCollection, USE_EXISTING );
         LOG.info( "Insert performed." );
