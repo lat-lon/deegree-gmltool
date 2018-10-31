@@ -144,8 +144,12 @@ options:
  --sqlFeatureStoreId=<feature_store_identifier>, the ID of the SQLFeatureStore in the given workspace
 ------------------------------
 
-::hint
-When using GmlLoader use idtype=uuid for FeatureStoreConfigLoader
+[NOTE]
+====
+Using the GmlLoader requires a deegree SQLFeatureStore configuration with a `UUIDGenerator` for all `FIDMapping` elements.
+Use the `-idtype=uuid` option when running the FeatureStoreConfigLoader. An GML instance document shall use the exact same
+prefix for all `gml:id` attributes as defined in the `FIDMapping:prefix` attribute of the deegree SQLFeatureStore configuration.
+====
 
 == Using the CLI behind a http proxy
 
