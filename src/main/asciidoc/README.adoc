@@ -7,9 +7,12 @@
 
 = deegree-tools-featurestore-sql
 
-This documentation contains the description of the command line interface deegree-tools-featurestore-sql. The command line utilities based on deegree
+This documentation contains the description of the command line interface (CLI) `deegree-tools-featurestore-sql`. The command line utilities based on deegree
 can generate SQL DDL scripts and deegree SQLFeatureStore configuration files from GML application schemas. Furthermore the command line supports a
-function to load a GML instance document directly into an existing deegree SQLFeatureStore.
+function to load a GML instance document directly into an existing deegree SQLFeatureStore. The CLI supports Oracle (Locator/Spatial) DBMS
+and PostgreSQL/PostGIS DBMS.
+
+The command line interface can be found in the directory _software_ of the deegree Enterprise distribution bundle.
 
 
 grit - graphische Informationstechnik - Beratungsgesellschaft mbH +
@@ -21,8 +24,6 @@ info@lat-lon.de http://www.lat-lon.de/ +
 Aennchenstraße 19 53177 Bonn +
 
 == Usage FeatureStoreConfigLoader
-
-The command line interface can be found in the directory _software_ in the distribution bundle.
 
 [subs="attributes+"]
 ------------------------------
@@ -38,82 +39,10 @@ options:
  --listOfPropertiesWithPrimitiveHref=<path/to/file>
 ------------------------------
 
-The SQL DDL and XML output is written into files in the current directory. The filename of each file is derived from the 
-schema file name in the given `schema_url`.
+The SQL DDL and XML output is written into two separate files in the current directory. The filename of each file is derived from the
+schema file name in the given `schemaUrl`.
 
-=== Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
-
-[subs="attributes+"]
-------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=ddl --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
-------------------------------
-
-The generated file is './CadastralParcels.sql'.    
-
-=== Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
-
-[subs="attributes+"]
-------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=deegree --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
-------------------------------
-    
-The generated file is './CadastralParcels.xml'.    
-
-=== Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
-
-[subs="attributes+"]
-------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=ddl --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
-------------------------------
-
-The generated file is './CadastralParcels.sql'.
-
-=== Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
-
-[subs="attributes+"]
-------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=deegree --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
-------------------------------
-
-The generated file is './CadastralParcels.xml'.
-
-=== Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
-
-[subs="attributes+"]
-------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=all --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
-------------------------------
-
-The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
-
-=== Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with Blob-Mapping
-
-[subs="attributes+"]
-------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=all --mapping=blob http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
-------------------------------
-    
-The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with Blob-Mapping for PostGIS.    
-
-=== Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 for Oracle DBMS with Oracle Locator
-
-[subs="attributes+"]
-------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=all --dialect=oracle http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
-------------------------------
-
-The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with relational mapping for Oracle Locator.
-
-### Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with list of properties with primitive href
-
-[subs="attributes+"]
-------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=deegree --listOfPropertiesWithPrimitiveHref=<path/to/file> http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
-------------------------------
-
-The generated file is './CadastralParcels.xml'. All properties listed in the referenced file are written with primitive instead of feature mappings.
-
-## Usage of option listOfPropertiesWithPrimitiveHref
+=== Usage of option listOfPropertiesWithPrimitiveHref
 
 The option listOfPropertiesWithPrimitiveHref references a file listing properties which are written with primitive instead of feature mappings.
 
@@ -132,7 +61,83 @@ Example:
     {http://inspire.ec.europa.eu/schemas/gn/4.0}nativeness
     {http://inspire.ec.europa.eu/schemas/ps/4.0}designation
 
+=== Examples
+
+==== Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
+
+[subs="attributes+"]
+------------------------------
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=ddl --idtype=uuid --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+------------------------------
+
+The generated file is './CadastralParcels.sql'.    
+
+==== Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with UUIDGenerator
+
+[subs="attributes+"]
+------------------------------
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=deegree --idtype=uuid --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+------------------------------
+    
+The generated file is './CadastralParcels.xml'.    
+
+==== Example: Generate SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+
+[subs="attributes+"]
+------------------------------
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=ddl --idtype=int --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+------------------------------
+
+The generated file is './CadastralParcels.sql'.
+
+==== Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+
+[subs="attributes+"]
+------------------------------
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=deegree --idtype=int --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+------------------------------
+
+The generated file is './CadastralParcels.xml'.
+
+==== Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with AutoIDGenerator
+
+[subs="attributes+"]
+------------------------------
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=all --idtype=int --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+------------------------------
+
+The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
+
+==== Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 with Blob-Mapping
+
+[subs="attributes+"]
+------------------------------
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=all --mapping=blob http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+------------------------------
+    
+The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with Blob-Mapping for PostGIS.    
+
+==== Example: Generate deegree SQLFeatureStore and SQL DDL for INSPIRE Cadastral Parcels 4.0 for Oracle DBMS with Oracle Locator
+
+[subs="attributes+"]
+------------------------------
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=all --dialect=oracle --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+------------------------------
+
+The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with relational mapping for Oracle Locator.
+
+==== Example: Generate deegree SQLFeatureStore for INSPIRE Cadastral Parcels 4.0 with list of properties with primitive href
+
+[subs="attributes+"]
+------------------------------
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=deegree --listOfPropertiesWithPrimitiveHref=<path/to/file> --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+------------------------------
+
+The generated file is './CadastralParcels.xml'. All properties listed in the referenced file are written with primitive instead of feature mappings.
+
 == Usage GmlLoader
+
+The `GmlLoader` can load a GML instance document into a given database using the deegree workspace configuration files.
 
 [subs="attributes+"]
 ------------------------------
@@ -151,9 +156,9 @@ Use the `-idtype=uuid` option when running the FeatureStoreConfigLoader. An GML 
 prefix for all `gml:id` attributes as defined in the `FIDMapping:prefix` attribute of the deegree SQLFeatureStore configuration.
 ====
 
-== Using the CLI behind a http proxy
+== Using the CLI behind a proxy
 
-Set the `http.proxyHost`, `http.proxyPort` and `http.nonProxyHosts` config properties.
+For HTTP set the `http.proxyHost`, `http.proxyPort` and `http.nonProxyHosts` config properties when executing the CLI.
 
 [subs="attributes+"]
 ------------------------------
