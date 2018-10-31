@@ -99,7 +99,7 @@
         <executions>
           <execution>
             <id>output-pdf</id>
-            <phase>generate-resources</phase>
+            <phase>prepare-package</phase>
             <goals>
               <goal>process-asciidoc</goal>
             </goals>
@@ -117,7 +117,7 @@
           </execution>
           <execution>
             <id>output-html</id>
-            <phase>generate-resources</phase>
+            <phase>prepare-package</phase>
             <goals>
               <goal>process-asciidoc</goal>
             </goals>
