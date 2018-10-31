@@ -57,6 +57,9 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <deegree.version>1.1-gmlloader-SNAPSHOT</deegree.version>
+    <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+    <spring-batch.version>4.0.1.RELEASE</spring-batch.version>
+    <spring-framework.version>5.0.8.RELEASE</spring-framework.version>
   </properties>
 
   <repositories>
@@ -263,13 +266,13 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>4.3.3.RELEASE</version>
+      <version>${spring-framework.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.batch</groupId>
       <artifactId>spring-batch-test</artifactId>
-      <version>3.0.8.RELEASE</version>
+      <version>${spring-batch.version}</version>
       <scope>test</scope>
     </dependency>
 
