@@ -23,6 +23,8 @@ public class LoadParameterBuilder {
     }
 
     public LoadParameterBuilder setSchemaUrl( String schemaUrl ) {
+        if (schemaUrl == null || schemaUrl.isEmpty())
+            throw new IllegalArgumentException("Value for option 'schemaUrl' must not be null. Option is mandatory.");
         loadParameter.setSchemaUrl( schemaUrl );
         return this;
     }
