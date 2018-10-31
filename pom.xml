@@ -107,7 +107,7 @@
                 <revnumber>${revnumber}</revnumber>
                 <tool-version>${project.version}</tool-version>
               </attributes>
-              <sourceDirectory>${project.basedir}</sourceDirectory>
+              <sourceDirectory>${project.basedir}/src/main/asciidoc</sourceDirectory>
               <sourceDocumentName>README.adoc</sourceDocumentName>
               <outputDirectory>${project.build.directory}/pdf</outputDirectory>
             </configuration>
@@ -128,7 +128,7 @@
                 <revnumber>${revnumber}</revnumber>
                 <tool-version>${project.version}</tool-version>
               </attributes>
-              <sourceDirectory>${project.basedir}</sourceDirectory>
+              <sourceDirectory>${project.basedir}/src/main/asciidoc</sourceDirectory>
               <sourceDocumentName>README.adoc</sourceDocumentName>
               <outputDirectory>${project.build.directory}/html</outputDirectory>
             </configuration>

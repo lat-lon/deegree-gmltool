@@ -3,7 +3,7 @@
 :toc: macro
 :toclevels: 3
 :numbered:
-:title-logo-image: src/main/asciidoc/images/Logo_deegree.png
+:title-logo-image: images/Logo_deegree.png
 
 = deegree-tools-featurestore-sql
 
@@ -26,9 +26,10 @@ The command line interface can be found in the directory _software_ in the distr
 
 [subs="attributes+"]
 ------------------------------
-Usage: java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar [options] schema_url
+Usage: java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader [options]
 
 options:
+ --schemaUrl=<url_to_schema_file>
  --format={deegree|ddl|all}, default=deegree
  --srid=<epsg_code>, default=4258
  --idtype={int|uuid}, default=int
@@ -44,7 +45,7 @@ schema file name in the given `schema_url`.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar --srid=25832 --format=ddl --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=ddl --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.sql'.    
@@ -53,7 +54,7 @@ The generated file is './CadastralParcels.sql'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar --srid=25832 --format=deegree --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=deegree --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
     
 The generated file is './CadastralParcels.xml'.    
@@ -62,7 +63,7 @@ The generated file is './CadastralParcels.xml'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar --srid=25832 --format=ddl --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=ddl --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.sql'.
@@ -71,7 +72,7 @@ The generated file is './CadastralParcels.sql'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar --srid=25832 --format=deegree --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=deegree --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.xml'.
@@ -80,7 +81,7 @@ The generated file is './CadastralParcels.xml'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar --srid=25832 --format=all --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=all --idtype=int http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
@@ -89,7 +90,7 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar --format=all --mapping=blob http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=all --mapping=blob http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
     
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with Blob-Mapping for PostGIS.    
@@ -98,7 +99,7 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' wi
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar --format=all --dialect=oracle http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=all --dialect=oracle http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with relational mapping for Oracle Locator.
@@ -107,7 +108,7 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' wi
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar --format=deegree --listOfPropertiesWithPrimitiveHref=<path/to/file> http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=deegree --listOfPropertiesWithPrimitiveHref=<path/to/file> http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.xml'. All properties listed in the referenced file are written with primitive instead of feature mappings.
@@ -116,7 +117,7 @@ The generated file is './CadastralParcels.xml'. All properties listed in the ref
 
 The option listOfPropertiesWithPrimitiveHref references a file listing properties which are written with primitive instead of feature mappings.
 
-For example, in some INSPIRE themes codelists values are stored in xlink:href attributes. Corresponding to the GML appplication schema the type is a gml:ReferenceType. Usually deegree would handle this as feature mapping but it is recommended to use a primitive mapping here.
+For example, in some INSPIRE themes codelists values are stored in `xlink:href` attributes. Corresponding to the GML appplication schema the type is a gml:ReferenceType. Usually deegree would handle this as feature mapping but it is recommended to use a primitive mapping here.
 
 Primitive mapping enables direct filtering on those properties with deegree. For example, filtering on INSPIRE codelist hrefs is possible then.
 
@@ -135,13 +136,16 @@ Example:
 
 [subs="attributes+"]
 ------------------------------
-Usage: java -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar GmlLoader [options]
+Usage: java -jar deegree-tools-featurestore-sql-{tool-version}.jar GmlLoader [options]
 
 options:
  --pathToFile=<path/to/gmlfile>, the path to the GML file to import
  --workspaceName=<workspace_identifier>, the name of the deegree workspace used for the import. Must be located at default DEEGREE_WORKSPACE_ROOT directory
  --sqlFeatureStoreId=<feature_store_identifier>, the ID of the SQLFeatureStore in the given workspace
 ------------------------------
+
+::hint
+When using GmlLoader use idtype=uuid for FeatureStoreConfigLoader
 
 == Using the CLI behind a http proxy
 
