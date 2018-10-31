@@ -106,7 +106,7 @@ public class FeatureStoreConfigWriter implements ItemWriter<AppSchema> {
     private void writeSqlDdlFile( MappedAppSchema mappedSchema, String fileName, SQLDialect sqlDialect )
                             throws IOException {
         String[] createStmts = DDLCreator.newInstance( mappedSchema, sqlDialect ).getDDL();
-        String sqlOutputFilename = "./" + fileName + ".sql";
+        String sqlOutputFilename = fileName + ".sql";
         Path pathToSqlOutputFile = Paths.get( sqlOutputFilename );
         LOG.info( "Writing SQL DDL into file: " + pathToSqlOutputFile.toUri() );
         try (BufferedWriter writer = Files.newBufferedWriter( pathToSqlOutputFile )) {
@@ -119,14 +119,15 @@ public class FeatureStoreConfigWriter implements ItemWriter<AppSchema> {
     private void writeXmlConfigFile( SQLFeatureStoreConfigWriter configWriter, String fileName )
                             throws XMLStreamException, IOException {
         List<String> configUrls = Collections.singletonList( loadParameter.getSchemaUrl() );
-        String xmlOutputFilename = "./" + fileName + ".xml";
-        LOG.info( "Writing deegree SQLFeatureStore configuration into file: " + xmlOutputFilename );
+        String xmlOutputFilename = fileName + ".xml";
+        Path pathToXmlOutputFile = Paths.get( xmlOutputFilename );
+        LOG.info( "Writing deegree SQLFeatureStore configuration into file: " + pathToXmlOutputFile.toUri() );
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         XMLStreamWriter xmlWriter = XMLOutputFactory.newInstance().createXMLStreamWriter( bos );
         xmlWriter = new IndentingXMLStreamWriter( xmlWriter );
         configWriter.writeConfig( xmlWriter, fileName + "DS", configUrls );
         xmlWriter.close();
-        Files.write( Paths.get( xmlOutputFilename ), bos.toString().getBytes( StandardCharsets.UTF_8 ) );
+        Files.write( pathToXmlOutputFile, bos.toString().getBytes( StandardCharsets.UTF_8 ) );
     }
 
     private SQLDialect instantiateDialect( String dialect ) {
