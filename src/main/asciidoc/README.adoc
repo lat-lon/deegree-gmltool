@@ -10,9 +10,8 @@
 This documentation contains the description of the command line interface (CLI) `deegree-tools-featurestore-sql`. The command line utilities based on deegree
 can generate SQL DDL scripts and deegree SQLFeatureStore configuration files from GML application schemas. Furthermore the command line supports a
 function to load a GML instance document directly into an existing deegree SQLFeatureStore. The CLI supports Oracle (Locator/Spatial) DBMS
-and PostgreSQL/PostGIS DBMS.
+and PostgreSQL/PostGIS DBMS. The command line interface can be found in the directory _software_ of the deegree Enterprise distribution bundle.
 
-The command line interface can be found in the directory _software_ of the deegree Enterprise distribution bundle.
 
 
 grit - graphische Informationstechnik - Beratungsgesellschaft mbH +
@@ -138,6 +137,8 @@ The generated file is './CadastralParcels.xml'. All properties listed in the ref
 == Usage GmlLoader
 
 The `GmlLoader` can load a GML instance document into a given database using the deegree workspace configuration files.
+To import a valid, GML-encoded dataset the instance document must conforms to the application schema and shall contain
+a `gml:FeatureCollection` containing multiple `gml:FeatureMember` elements.
 
 [subs="attributes+"]
 ------------------------------
