@@ -1,20 +1,31 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
+import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import static org.deegree.commons.xml.CommonNamespaces.GMLNS;
+import static org.deegree.protocol.wfs.WFSConstants.WFS_200_NS;
+import static org.deegree.protocol.wfs.WFSConstants.WFS_NS;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.deegree.commons.xml.stax.XMLStreamReaderWrapper;
+import org.deegree.commons.xml.stax.XMLStreamUtils;
 import org.deegree.feature.Feature;
+import org.deegree.feature.FeatureCollection;
 import org.deegree.feature.persistence.sql.SQLFeatureStore;
+import org.deegree.feature.stream.FeatureInputStream;
 import org.deegree.feature.types.AppSchema;
 import org.deegree.gml.GMLInputFactory;
 import org.deegree.gml.GMLStreamReader;
 import org.deegree.gml.GMLVersion;
-import org.deegree.gml.feature.StreamFeatureCollection;
 import org.slf4j.Logger;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
@@ -23,7 +34,7 @@ import org.springframework.batch.item.support.AbstractItemStreamItemReader;
 import org.springframework.core.io.Resource;
 
 /**
- * Reads a GML 3.2 resource.
+ * Reads a GML 3.2 resource as well as wfs:FeatureCollections.
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -31,6 +42,12 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
                                                                     ResourceAwareItemReaderItemStream<Feature> {
 
     private static final Logger LOG = getLogger( GmlReader.class );
+
+    public static final QName WFS_20_MEMBER = new QName( WFS_200_NS, "member" );
+
+    public static final QName GML_MEMBER = new QName( GMLNS, "featureMember" );
+
+    public static final QName GML_MEMBERS = new QName( GMLNS, "featureMembers" );
 
     private final SQLFeatureStore sqlFeatureStore;
 
@@ -40,7 +57,9 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
 
     private XMLStreamReader xmlStreamReader;
 
-    private StreamFeatureCollection featureStream;
+    private FeatureInputStream featureStream;
+
+    private Iterator<Feature> featureIterator;
 
     private int noOfFeaturesRead = 0;
 
@@ -60,10 +79,12 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
     @Override
     public Feature read()
                             throws Exception {
-        if ( this.featureStream == null ) {
+        if ( this.featureStream == null || this.featureIterator == null ) {
             return null;
         }
-        Feature feature = this.featureStream.read();
+        if ( !featureIterator.hasNext() )
+            return null;
+        Feature feature = this.featureIterator.next();
         if ( feature != null )
             LOG.info( "Read feature with id " + feature.getId() + " (number " + ++noOfFeaturesRead + ") " );
         return feature;
@@ -113,7 +134,19 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
             XMLStreamReaderWrapper xmlStream = new XMLStreamReaderWrapper( xmlStreamReader, null );
             GMLStreamReader gmlStreamReader = GMLInputFactory.createGMLStreamReader( version, xmlStream );
             gmlStreamReader.setApplicationSchema( findSchema() );
-            this.featureStream = gmlStreamReader.readFeatureCollectionStream();
+
+            if ( new QName( WFS_200_NS, "FeatureCollection" ).equals( xmlStream.getName() ) ) {
+                LOG.debug( "Features embedded in wfs20:FeatureCollection" );
+                this.featureStream = new WfsFeatureInputStream( xmlStream, gmlStreamReader, WFS_20_MEMBER );
+            } else if ( new QName( WFS_NS, "FeatureCollection" ).equals( xmlStream.getName() ) ) {
+                LOG.debug( "Features embedded in wfs:FeatureCollection" );
+                this.featureStream = new WfsFeatureInputStream( xmlStream, gmlStreamReader, GML_MEMBER, GML_MEMBERS );
+            } else {
+                LOG.debug( "Features embedded in gml:FeatureCollection" );
+                this.featureStream = gmlStreamReader.readFeatureCollectionStream();
+            }
+
+            this.featureIterator = featureStream.iterator();
         } catch ( Exception e ) {
             throw new ItemStreamException( "Failed to initialize the reader", e );
         }
@@ -122,6 +155,81 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
     private AppSchema findSchema() {
         if ( sqlFeatureStore != null )
             return sqlFeatureStore.getSchema();
+        return null;
+    }
+
+    private class WfsFeatureInputStream implements FeatureInputStream {
+
+        private final XMLStreamReader xmlStream;
+
+        private final GMLStreamReader gmlStream;
+
+        private final List<QName> matchingNames;
+
+        private Feature next;
+
+        public WfsFeatureInputStream( XMLStreamReader xmlStream, GMLStreamReader gmlStream, QName... matchingNames ) {
+            this.xmlStream = xmlStream;
+            this.gmlStream = gmlStream;
+            this.matchingNames = Arrays.asList( matchingNames );
+            this.next = retrieveNext( xmlStream, gmlStream, this.matchingNames );
+        }
+
+        @Override
+        public Iterator<Feature> iterator() {
+
+            return new Iterator<Feature>() {
+                @Override
+                public boolean hasNext() {
+                    return next != null;
+                }
+
+                @Override
+                public Feature next() {
+                    if ( next == null ) {
+                        throw new NoSuchElementException();
+                    }
+                    Feature currentFeature = next;
+                    next = retrieveNext( xmlStream, gmlStream, matchingNames );
+                    return currentFeature;
+                }
+            };
+
+        }
+
+        @Override
+        public void close() {
+
+        }
+
+        @Override
+        public FeatureCollection toCollection() {
+            return null;
+        }
+
+        @Override
+        public int count() {
+            return 0;
+        }
+    }
+
+    private Feature retrieveNext( XMLStreamReader xmlStream, GMLStreamReader gmlStream, List<QName> matchingNames ) {
+        try {
+            while ( xmlStream.nextTag() == START_ELEMENT ) {
+                QName elName = xmlStream.getName();
+                if ( matchingNames.contains( elName ) ) {
+                    xmlStream.nextTag();
+                    Feature feature = gmlStream.readFeature();
+                    xmlStream.nextTag();
+                    return feature;
+                } else {
+                    LOG.debug( "Ignoring element '" + elName + "'" );
+                    XMLStreamUtils.skipElement( xmlStream );
+                }
+            }
+        } catch ( Exception e ) {
+            LOG.error( "Failed", e );
+        }
         return null;
     }
 
