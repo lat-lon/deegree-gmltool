@@ -47,6 +47,7 @@ public class TransactionHandler implements StepExecutionListener {
             this.featureStoreTransaction.setHandleReferencesAsResolved( true );
             LOG.info( "Acquired transaction." );
         } catch ( Exception e ) {
+            LOG.error( "Transaction could not acquired!", e );
             throw new RuntimeException( "Transaction could not acquired!", e );
         }
     }
