@@ -77,6 +77,10 @@ public class GmlLoaderConfiguration {
         SQLFeatureStore featureStore = (SQLFeatureStore) newWorkspace.getResource( FeatureStoreProvider.class,
                                                                                    sqlFeatureStoreId );
         LOG.info( "SQLFeatureStore: [" + sqlFeatureStoreId + "] requested." );
+        if ( featureStore == null )
+            throw new IllegalArgumentException( "SQLFeatureStore with ID " + sqlFeatureStoreId + " in workspace "
+                                                + workspaceName
+                                                + " does not exist or could not be initialised successful." );
         return featureStore;
     }
 
