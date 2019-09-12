@@ -136,9 +136,9 @@ The generated file is './CadastralParcels.xml'. All properties listed in the ref
 
 == Usage GmlLoader
 
-The `GmlLoader` can load a GML instance document into a given database using the deegree workspace configuration files.
+The `GmlLoader` can load a GML instance document into a given database using a deegree workspace with SQLFeatureStore configuration file. Other configuration files in the workspace are ignored.
 To import a valid, GML-encoded dataset the instance document must conforms to the application schema and shall contain
-a `gml:FeatureCollection` containing multiple `gml:FeatureMember` elements.
+a `gml:FeatureCollection` containing multiple `gml:FeatureMember` elements or a `wfs:FeatureCollection` containing multiple `wfs:member`. The gml:id of the inserted features are kept.
 
 [subs="attributes+"]
 ------------------------------
