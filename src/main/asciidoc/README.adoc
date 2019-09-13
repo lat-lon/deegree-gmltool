@@ -148,6 +148,7 @@ options:
  --pathToFile=<path/to/gmlfile>, the path to the GML file to import
  --workspaceName=<workspace_identifier>, the name of the deegree workspace used for the import. Must be located at default DEEGREE_WORKSPACE_ROOT directory
  --sqlFeatureStoreId=<feature_store_identifier>, the ID of the SQLFeatureStore in the given workspace
+ --disabledResources=<urlpatterns>, a comma separated list url patterns which should not be resolved
 ------------------------------
 
 [NOTE]

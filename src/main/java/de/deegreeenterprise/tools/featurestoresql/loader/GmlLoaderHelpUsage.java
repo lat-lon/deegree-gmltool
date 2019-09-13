@@ -13,6 +13,7 @@ public class GmlLoaderHelpUsage {
         System.out.println( " -pathToFile=<path/to/gmlfile> - the path to the GML file to import" );
         System.out.println( " -workspaceName=<workspace_identifier> - the name of the deegree workspace used for the import. Must be located at default DEEGREE_WORKSPACE_ROOT directory" );
         System.out.println( " -sqlFeatureStoreId=<feature_store_identifier> - the ID of the SQLFeatureStore in the given workspace" );
+        System.out.println( " -disabledResources=<urlpatterns> - a comma separated list url patterns which should not be resolved" );
         System.out.println();
         System.out.println( "Example:" );
         System.out.println( " java -jar deegree-tools-featurestore-sql.jar GmlLoader -pathToFile=/path/to/cadastralparcels.gml -workspaceName=inspire -sqlFeatureStoreId=cadastralparcels" );

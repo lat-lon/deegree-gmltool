@@ -21,6 +21,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.PathResource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Configuration of the GMLLoader.
  *
@@ -47,9 +50,11 @@ public class GmlLoaderConfiguration {
     @StepScope
     @Bean
     public GmlReader gmlReader( SQLFeatureStore sqlFeatureStore,
-                                @Value("#{jobParameters[pathToFile]}") String pathToFile ) {
+                                @Value("#{jobParameters[pathToFile]}") String pathToFile,
+                                @Value("#{jobParameters[disabledResources]}") String disabledResources ) {
         GmlReader gmlReader = new GmlReader( sqlFeatureStore );
         gmlReader.setResource( new PathResource( pathToFile ) );
+        gmlReader.setDisabledResources( parseDisabledResources( disabledResources ) );
         return gmlReader;
     }
 
@@ -95,4 +100,15 @@ public class GmlLoaderConfiguration {
         return jobBuilderFactory.get( "gmlLoaderJob" ).incrementer( new RunIdIncrementer() ).start( step ).build();
     }
 
+    private List<String> parseDisabledResources( String disabledResources ) {
+        List<String> patterns = new ArrayList<>();
+        String[] split = disabledResources.split( "," );
+        for ( String resource : split ) {
+            String pattern = resource.trim();
+            if ( !pattern.isEmpty() )
+                patterns.add( pattern );
+        }
+        return patterns;
+    }
+    
 }

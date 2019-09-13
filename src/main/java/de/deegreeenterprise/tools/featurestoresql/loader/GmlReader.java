@@ -26,6 +26,9 @@ import org.deegree.feature.types.AppSchema;
 import org.deegree.gml.GMLInputFactory;
 import org.deegree.gml.GMLStreamReader;
 import org.deegree.gml.GMLVersion;
+import org.deegree.gml.reference.matcher.BaseUrlReferencePatternMatcher;
+import org.deegree.gml.reference.matcher.MultipleReferencePatternMatcher;
+import org.deegree.gml.reference.matcher.ReferencePatternMatcher;
 import org.slf4j.Logger;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStreamException;
@@ -62,6 +65,8 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
     private Iterator<Feature> featureIterator;
 
     private int noOfFeaturesRead = 0;
+
+    private List<String> disabledResources;
 
     /**
      * @param sqlFeatureStore
@@ -126,6 +131,10 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
 
     }
 
+    public void setDisabledResources( List<String> disabledResources ) {
+        this.disabledResources = disabledResources;
+    }
+    
     private void openFeatureStream() {
         try {
             this.inputStream = this.resource.getInputStream();
@@ -134,6 +143,7 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
             XMLStreamReaderWrapper xmlStream = new XMLStreamReaderWrapper( xmlStreamReader, null );
             GMLStreamReader gmlStreamReader = GMLInputFactory.createGMLStreamReader( version, xmlStream );
             gmlStreamReader.setApplicationSchema( findSchema() );
+            gmlStreamReader.setReferencePatternMatcher( parseDisabledResources(  ) );
 
             if ( new QName( WFS_200_NS, "FeatureCollection" ).equals( xmlStream.getName() ) ) {
                 LOG.debug( "Features embedded in wfs20:FeatureCollection" );
@@ -229,6 +239,19 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
             }
         } catch ( Exception e ) {
             LOG.error( "Failed", e );
+        }
+        return null;
+    }
+
+    private ReferencePatternMatcher parseDisabledResources() {
+        if ( disabledResources != null && !disabledResources.isEmpty() ) {
+            MultipleReferencePatternMatcher matcher = new MultipleReferencePatternMatcher();
+            for ( String disabledResource : disabledResources ) {
+                LOG.debug( "Added disabled resource pattern " + disabledResource );
+                BaseUrlReferencePatternMatcher baseUrlMatcher = new BaseUrlReferencePatternMatcher( disabledResource );
+                matcher.addMatcherToApply( baseUrlMatcher );
+            }
+            return matcher;
         }
         return null;
     }
