@@ -29,13 +29,13 @@ Aennchenstraße 19 53177 Bonn +
 Usage: java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader [options]
 
 options:
- --schemaUrl=<url_to_schema_file>
- --format={deegree|ddl|all}, default=deegree
- --srid=<epsg_code>, default=4258
- --idtype={int|uuid}, default=int
- --mapping={relational|blob}, default=relational
- --dialect={postgis|oracle}, default=postgis
- --listOfPropertiesWithPrimitiveHref=<path/to/file>
+ -schemaUrl=<url_to_schema_file>
+ -format={deegree|ddl|all}, default=deegree
+ -srid=<epsg_code>, default=4258
+ -idtype={int|uuid}, default=int
+ -mapping={relational|blob}, default=relational
+ -dialect={postgis|oracle}, default=postgis
+ -listOfPropertiesWithPrimitiveHref=<path/to/file>
 ------------------------------
 
 The SQL DDL and XML output is written into two separate files in the current directory. The filename of each file is derived from the
@@ -66,7 +66,7 @@ Example:
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=ddl --idtype=uuid --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=ddl -idtype=uuid -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.sql'.    
@@ -75,7 +75,7 @@ The generated file is './CadastralParcels.sql'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=deegree --idtype=uuid --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=deegree -idtype=uuid -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
     
 The generated file is './CadastralParcels.xml'.    
@@ -84,7 +84,7 @@ The generated file is './CadastralParcels.xml'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=ddl --idtype=int --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=ddl -idtype=int -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.sql'.
@@ -93,7 +93,7 @@ The generated file is './CadastralParcels.sql'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=deegree --idtype=int --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=deegree -idtype=int -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.xml'.
@@ -102,7 +102,7 @@ The generated file is './CadastralParcels.xml'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --srid=25832 --format=all --idtype=int --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=all -idtype=int -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
@@ -111,7 +111,7 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=all --mapping=blob http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader -format=all -mapping=blob http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
     
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with Blob-Mapping for PostGIS.    
@@ -120,7 +120,7 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' wi
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=all --dialect=oracle --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader -format=all -dialect=oracle -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with relational mapping for Oracle Locator.
@@ -129,14 +129,14 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' wi
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader --format=deegree --listOfPropertiesWithPrimitiveHref=<path/to/file> --schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-tools-featurestore-sql-{tool-version}.jar FeatureStoreConfigLoader -format=deegree -listOfPropertiesWithPrimitiveHref=<path/to/file> -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.xml'. All properties listed in the referenced file are written with primitive instead of feature mappings.
 
 == Usage GmlLoader
 
-The `GmlLoader` can load a GML instance document into a given database using a deegree workspace with SQLFeatureStore configuration file. Other configuration files in the workspace are ignored.
+The `GmlLoader` can load a GML instance document into a given database using a deegree workspace with SQLFeatureStore configuration file. Other configuration files than the SQLFeatureStore configuration and referenced resources in the workspace are ignored.
 To import a valid, GML-encoded dataset the instance document must conforms to the application schema and shall contain
 a `gml:FeatureCollection` containing multiple `gml:FeatureMember` elements or a `wfs:FeatureCollection` containing multiple `wfs:member`. The gml:id of the inserted features are kept.
 
@@ -145,10 +145,10 @@ a `gml:FeatureCollection` containing multiple `gml:FeatureMember` elements or a 
 Usage: java -jar deegree-tools-featurestore-sql-{tool-version}.jar GmlLoader [options]
 
 options:
- --pathToFile=<path/to/gmlfile>, the path to the GML file to import
- --workspaceName=<workspace_identifier>, the name of the deegree workspace used for the import. Must be located at default DEEGREE_WORKSPACE_ROOT directory
- --sqlFeatureStoreId=<feature_store_identifier>, the ID of the SQLFeatureStore in the given workspace
- --disabledResources=<urlpatterns>, a comma separated list url patterns which should not be resolved
+ -pathToFile=<path/to/gmlfile>, the path to the GML file to import
+ -workspaceName=<workspace_identifier>, the name of the deegree workspace used for the import. Must be located at default DEEGREE_WORKSPACE_ROOT directory
+ -sqlFeatureStoreId=<feature_store_identifier>, the ID of the SQLFeatureStore in the given workspace
+ -disabledResources=<urlpatterns>, a comma separated list url patterns which should not be resolved
 ------------------------------
 
 [NOTE]
@@ -164,6 +164,6 @@ For HTTP set the `http.proxyHost`, `http.proxyPort` and `http.nonProxyHosts` con
 
 [subs="attributes+"]
 ------------------------------
-java -Dhttp.proxyHost=your-proxy.net -Dhttp.proxyPort=80 -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar --format=ddl --idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -Dhttp.proxyHost=your-proxy.net -Dhttp.proxyPort=80 -jar deegree-tools-featurestore-sql-{tool-version}-jar-with-dependencies.jar -format=ddl -idtype=uuid http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
