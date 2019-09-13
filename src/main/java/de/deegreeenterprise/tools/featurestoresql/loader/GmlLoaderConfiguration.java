@@ -102,11 +102,13 @@ public class GmlLoaderConfiguration {
 
     private List<String> parseDisabledResources( String disabledResources ) {
         List<String> patterns = new ArrayList<>();
-        String[] split = disabledResources.split( "," );
-        for ( String resource : split ) {
-            String pattern = resource.trim();
-            if ( !pattern.isEmpty() )
-                patterns.add( pattern );
+        if ( disabledResources != null ) {
+            String[] split = disabledResources.split( "," );
+            for ( String resource : split ) {
+                String pattern = resource.trim();
+                if ( !pattern.isEmpty() )
+                    patterns.add( pattern );
+            }
         }
         return patterns;
     }
