@@ -21,7 +21,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class FeatureStoreWriter implements ItemWriter<Feature> {
 
-    private static final Logger LOG = getLogger( GmlLoaderConfiguration.class );
+    private static final Logger LOG = getLogger( FeatureStoreWriter.class );
 
     private SQLFeatureStore sqlFeatureStore;
 
