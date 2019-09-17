@@ -14,7 +14,7 @@
                                             http://inspire.ec.europa.eu/schemas/base/3.3
                                             https://inspire.ec.europa.eu/schemas/base/3.3/BaseTypes.xsd" >
   <gmlfm:featureMember>
-    <cp:CadastralParcel gml:id="NL.KAD.CP.LNK00D.2377">
+    <cp:CadastralParcel gml:id="CP_CADASTRALPARCEL_1">
       <cp:beginLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:endLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:geometry>
@@ -73,7 +73,7 @@
     </cp:CadastralParcel>
   </gmlfm:featureMember>
   <gmlfm:featureMember>
-    <cp:CadastralParcel gml:id="NL.KAD.CP.LNK00D.2378">
+    <cp:CadastralParcel gml:id="CP_CADASTRALPARCEL_2">
       <cp:beginLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:endLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:geometry>
@@ -120,7 +120,7 @@
     </cp:CadastralParcel>
   </gmlfm:featureMember>
   <gmlfm:featureMember>
-    <cp:CadastralParcel gml:id="NL.KAD.CP.LNK00D.2451">
+    <cp:CadastralParcel gml:id="CP_CADASTRALPARCEL_3">
       <cp:beginLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:endLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:geometry>
@@ -195,7 +195,7 @@
     </cp:CadastralParcel>
   </gmlfm:featureMember>
   <gmlfm:featureMember>
-    <cp:CadastralParcel gml:id="NL.KAD.CP.LNK00D.2376">
+    <cp:CadastralParcel gml:id="CP_CADASTRALPARCEL_4">
       <cp:beginLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:endLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:geometry>
@@ -235,7 +235,7 @@
     </cp:CadastralParcel>
   </gmlfm:featureMember>
   <gmlfm:featureMember>
-    <cp:CadastralParcel gml:id="NL.KAD.CP.LNK00AA.2376">
+    <cp:CadastralParcel gml:id="CP_CADASTRALPARCEL_5">
       <cp:beginLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:endLifespanVersion xsi:nil="true" nilReason="UNKNOWN" />
       <cp:geometry>

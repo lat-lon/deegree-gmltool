@@ -26,16 +26,20 @@ public class TransactionHandler implements StepExecutionListener {
 
     private static final Logger LOG = getLogger( TransactionHandler.class );
 
+    private final Summary summary;
+
     private SQLFeatureStore sqlFeatureStore;
 
     private SQLFeatureStoreTransaction featureStoreTransaction;
 
     /**
-     *
      * @param sqlFeatureStore
      *            used for transactions, never <code>null</code>
+     * @param summary
+     *            writing the report, never <code>null</code>
      */
-    public TransactionHandler( SQLFeatureStore sqlFeatureStore ) {
+    public TransactionHandler( SQLFeatureStore sqlFeatureStore, Summary summary ) {
+        this.summary = summary;
         Assert.notNull( sqlFeatureStore, "sqlFeatureStore  must not be null" );
         this.sqlFeatureStore = sqlFeatureStore;
     }
@@ -64,6 +68,7 @@ public class TransactionHandler implements StepExecutionListener {
         if ( featureReferenceCheckResult.isValid() ) {
             return commitOrRollback( stepExecution, featureStoreTransaction );
         } else {
+            summary.setUnresolvableReferences( featureReferenceCheckResult.getUnresolvableReferences()  );
             logResult( featureReferenceCheckResult );
             rollback();
             return new ExitStatus( "FAILED", "Unresolvable References!" );
@@ -89,6 +94,7 @@ public class TransactionHandler implements StepExecutionListener {
             }
             return exitStatus;
         } catch ( FeatureStoreException e ) {
+            summary.setCommitFailed( e.getMessage() );
             LOG.error( "Could not commit/rollback the transaction.", e );
             return FAILED;
         }

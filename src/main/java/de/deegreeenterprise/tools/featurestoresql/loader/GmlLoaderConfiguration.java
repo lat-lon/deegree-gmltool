@@ -2,6 +2,11 @@ package de.deegreeenterprise.tools.featurestoresql.loader;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.deegree.commons.config.DeegreeWorkspace;
 import org.deegree.feature.Feature;
 import org.deegree.feature.persistence.FeatureStoreProvider;
@@ -21,9 +26,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.PathResource;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Configuration of the GMLLoader.
  *
@@ -41,10 +43,21 @@ public class GmlLoaderConfiguration {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
+    @Bean
+    public Summary summary() {
+        return new Summary();
+    }
+
+    @Bean
+    public ReportWriter reportWriter( Summary summary ) {
+        Path outputFile = Paths.get( "summary.log" );
+        return new ReportWriter( summary, outputFile );
+    }
+
     @StepScope
     @Bean
-    public TransactionHandler transactionHandler( SQLFeatureStore sqlFeatureStore ) {
-        return new TransactionHandler( sqlFeatureStore );
+    public TransactionHandler transactionHandler( SQLFeatureStore sqlFeatureStore, Summary summary ) {
+        return new TransactionHandler( sqlFeatureStore, summary );
     }
 
     @StepScope
@@ -66,8 +79,8 @@ public class GmlLoaderConfiguration {
 
     @StepScope
     @Bean
-    public FeatureStoreWriter featureStoreWriter( SQLFeatureStore sqlFeatureStore ) {
-        return new FeatureStoreWriter( sqlFeatureStore );
+    public FeatureStoreWriter featureStoreWriter( SQLFeatureStore sqlFeatureStore, Summary summary ) {
+        return new FeatureStoreWriter( sqlFeatureStore, summary );
     }
 
     @StepScope
@@ -91,8 +104,8 @@ public class GmlLoaderConfiguration {
 
     @Bean
     public Step step( TransactionHandler transactionHandler, GmlReader gmlReader,
-                      FeatureReferencesParser featureReferencesParser, FeatureStoreWriter featureStoreWriter ) {
-        return stepBuilderFactory.get( "gmlLoaderStep" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).writer( featureStoreWriter ).listener( transactionHandler ).build();
+                            FeatureReferencesParser featureReferencesParser, FeatureStoreWriter featureStoreWriter, ReportWriter reportWriter ) {
+        return stepBuilderFactory.get( "gmlLoaderStep" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).writer( featureStoreWriter ).listener( transactionHandler ).listener( reportWriter ).build();
     }
 
     @Bean
@@ -112,5 +125,5 @@ public class GmlLoaderConfiguration {
         }
         return patterns;
     }
-    
+
 }
