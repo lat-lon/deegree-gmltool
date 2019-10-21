@@ -16,6 +16,8 @@ public class LoadParameterBuilder {
 
     private static final String DEFAULT_DIALECT = "postgis";
 
+    private static final int DEFAULT_DEPTH = 0;
+
     private final LoadParameter loadParameter;
 
     public LoadParameterBuilder() {
@@ -75,6 +77,18 @@ public class LoadParameterBuilder {
         return this;
     }
 
+    public LoadParameterBuilder setDepth( String depth ) {
+        if ( depth == null || depth.isEmpty() )
+            loadParameter.setDepth( DEFAULT_DEPTH );
+        try {
+            loadParameter.setDepth( Integer.parseInt( depth ) );
+        } catch ( NumberFormatException e ) {
+            throw new IllegalArgumentException( "Invalid value of parameter cycledepth: " + depth
+                                                + ". Must be an integer value." );
+        }
+        return this;
+    }
+
     public LoadParameterBuilder setListOfPropertiesWithPrimitiveHref( String pathToFileWithPropertiesWithPrimitiveHref ) {
         if ( pathToFileWithPropertiesWithPrimitiveHref != null ) {
             PropertyNameParser propertyNameParser = new PropertyNameParser();
@@ -91,4 +105,5 @@ public class LoadParameterBuilder {
             throw new IllegalArgumentException( "Could not parse srid " + srid + " as integer" );
         }
     }
+
 }

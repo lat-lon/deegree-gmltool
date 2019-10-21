@@ -36,8 +36,9 @@ public class FeatureStoreLoaderConfiguration {
                                             @Value("#{jobParameters[idtype]}") String idtype,
                                             @Value("#{jobParameters[mapping]}") String mapping,
                                             @Value("#{jobParameters[dialect]}") String dialect,
+                                            @Value("#{jobParameters[cycledepth]}") String depth,
                                             @Value("#{jobParameters[listOfPropertiesWithPrimitiveHref]}") String listOfPropertiesWithPrimitiveHref ) {
-        return new LoadParameterBuilder().setSchemaUrl( schemaUrl ).setFormat( format ).setSrid( srid ).setIdType( idtype ).setMappingType( mapping ).setDialect( dialect ).setListOfPropertiesWithPrimitiveHref( listOfPropertiesWithPrimitiveHref ).build();
+        return new LoadParameterBuilder().setSchemaUrl( schemaUrl ).setFormat( format ).setSrid( srid ).setIdType( idtype ).setMappingType( mapping ).setDialect( dialect ).setDepth( depth ).setListOfPropertiesWithPrimitiveHref( listOfPropertiesWithPrimitiveHref ).build();
 
     }
 
