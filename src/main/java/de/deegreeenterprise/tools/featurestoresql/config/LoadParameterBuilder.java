@@ -78,13 +78,15 @@ public class LoadParameterBuilder {
     }
 
     public LoadParameterBuilder setDepth( String depth ) {
-        if ( depth == null || depth.isEmpty() )
+        if ( depth == null || depth.isEmpty() ) {
             loadParameter.setDepth( DEFAULT_DEPTH );
-        try {
-            loadParameter.setDepth( Integer.parseInt( depth ) );
-        } catch ( NumberFormatException e ) {
-            throw new IllegalArgumentException( "Invalid value of parameter cycledepth: " + depth
-                                                + ". Must be an integer value." );
+        } else {
+            try {
+                loadParameter.setDepth( Integer.parseInt( depth ) );
+            } catch ( NumberFormatException e ) {
+                throw new IllegalArgumentException( "Invalid value of parameter cycledepth: " + depth
+                                                    + ". Must be an integer value." );
+            }
         }
         return this;
     }
