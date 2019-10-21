@@ -1,4 +1,6 @@
-package de.weichand.deegree;
+package de.deegreeenterprise.tools.featurestoresql.config;
+
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,12 +15,16 @@ import java.util.stream.Stream;
 
 import javax.xml.namespace.QName;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Parser for property names from a file.
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class PropertyNameParser {
+
+    private static final Logger LOG = getLogger( PropertyNameParser.class );
 
     /**
      * Parses the property names from the passed file. The properties are parsed line by line. Empty lines as well as
@@ -55,9 +61,9 @@ public class PropertyNameParser {
             parseList( properties, list );
             return properties;
         } catch ( NoSuchFileException e ) {
-            System.out.println( "Referenced listOfPropertiesWithPrimitiveHref cannot be found and is ignored! " );
+            LOG.error( "Referenced listOfPropertiesWithPrimitiveHref cannot be found and is ignored! " );
         } catch ( IOException i ) {
-            System.out.println( "Referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored! Exception: "
+            LOG.error( "Referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored! Exception: "
                                 + i.getMessage() );
         }
         return null;
@@ -71,7 +77,7 @@ public class PropertyNameParser {
                     QName qName = QName.valueOf( trimmedEntry );
                     properties.add( qName );
                 } catch ( IllegalArgumentException e ) {
-                    System.out.println( "One line of referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored: "
+                    LOG.error( "One line of referenced listOfPropertiesWithPrimitiveHref cannot be parsed and is ignored: "
                                         + entry );
                 }
             }
