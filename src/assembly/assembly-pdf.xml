@@ -10,7 +10,7 @@
     <file>
       <source>${project.build.directory}/pdf/README.pdf</source>
       <outputDirectory>/</outputDirectory>
-      <destName>deegree-tools-featurestore-sql-documentation.pdf</destName>
+      <destName>deegree-gml-tool.pdf</destName>
     </file>
   </files>
 </assembly>

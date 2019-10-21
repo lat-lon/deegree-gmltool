@@ -9,7 +9,7 @@
   <files>
     <file>
       <source>${project.build.directory}/html/README.html</source>
-      <outputDirectory>deegree-tools-featurestore-sql-documentation</outputDirectory>
+      <outputDirectory>deegree-gml-tool-documentation</outputDirectory>
       <destName>index.html</destName>
     </file>
   </files>
