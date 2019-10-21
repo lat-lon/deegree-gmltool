@@ -50,7 +50,7 @@ public class GmlLoaderConfiguration {
 
     @Bean
     public ReportWriter reportWriter( Summary summary ) {
-        Path outputFile = Paths.get( "summary.log" );
+        Path outputFile = Paths.get( "GmlLoader.log" );
         return new ReportWriter( summary, outputFile );
     }
 
