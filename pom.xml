@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.deegree-enterprise</groupId>
   <artifactId>deegree-tools-featurestore-sql</artifactId>
-  <version>1.1-gmlloader-SNAPSHOT</version>
+  <version>1.333-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <parent>
