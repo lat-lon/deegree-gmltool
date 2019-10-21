@@ -6,7 +6,7 @@ package de.deegreeenterprise.tools.featurestoresql.loader;
 public class GmlLoaderHelpUsage {
 
     public static void printUsage() {
-        System.out.println( "Usage: java -jar deegree-tools-featurestore-sql.jar GmlLoader [options]" );
+        System.out.println( "Usage: java -jar deegree-gml-tool.jar GmlLoader [options]" );
         System.out.println( "Description: Imports a GML file directly into a given deegree SQLFeatureStore" );
         System.out.println();
         System.out.println( "options (all are mandatory):" );
@@ -16,7 +16,7 @@ public class GmlLoaderHelpUsage {
         System.out.println( " -disabledResources=<urlpatterns> - a comma separated list url patterns which should not be resolved" );
         System.out.println();
         System.out.println( "Example:" );
-        System.out.println( " java -jar deegree-tools-featurestore-sql.jar GmlLoader -pathToFile=/path/to/cadastralparcels.gml -workspaceName=inspire -sqlFeatureStoreId=cadastralparcels" );
+        System.out.println( " java -jar deegree-gml-tool.jar GmlLoader -pathToFile=/path/to/cadastralparcels.gml -workspaceName=inspire -sqlFeatureStoreId=cadastralparcels" );
     }
 
 }
