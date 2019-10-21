@@ -23,6 +23,8 @@ public class LoadParameter {
 
     private List<QName> propertiesWithPrimitiveHref;
 
+    private int depth;
+
     LoadParameter() {
     }
 
@@ -80,6 +82,14 @@ public class LoadParameter {
 
     public void setDialect( String dialect ) {
         this.dialect = dialect;
+    }
+
+    public void setDepth( int depth ) {
+        this.depth = depth;
+    }
+
+    public int getDepth() {
+        return depth;
     }
 
     /**
