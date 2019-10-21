@@ -10,6 +10,7 @@ import org.deegree.feature.FeatureCollection;
 import org.deegree.feature.GenericFeatureCollection;
 import org.deegree.feature.persistence.sql.SQLFeatureStore;
 import org.deegree.feature.persistence.sql.SQLFeatureStoreTransaction;
+import org.deegree.protocol.wfs.transaction.action.IDGenMode;
 import org.slf4j.Logger;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.util.Assert;
@@ -52,7 +53,7 @@ public class FeatureStoreWriter implements ItemWriter<Feature> {
         }
         LOG.info( "Trying to write " + featureCollection.size() + " features" );
         SQLFeatureStoreTransaction transaction = (SQLFeatureStoreTransaction) sqlFeatureStore.getTransaction();
-        transaction.performInsert( featureCollection, USE_EXISTING );
+        transaction.performInsert( featureCollection, USE_EXISTING.withSkipResolveReferences( true ) );
         LOG.info( "Insert performed." );
         summary.increaseNumberOfFeatures( featureCollection.size() );
     }
