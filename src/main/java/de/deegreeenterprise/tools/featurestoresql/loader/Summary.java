@@ -1,7 +1,8 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.batch.core.StepExecution;
 
@@ -14,7 +15,7 @@ public class Summary {
 
     private int numberOfFeatures = 0;
 
-    private List<String> unresolvableReferences = new ArrayList<>();
+    private Set<String> unresolvableReferences = new HashSet<>();
 
     private StepExecution stepExecution;
 
@@ -37,7 +38,7 @@ public class Summary {
      * @param unresolvableReferences
      *            list of unresolvable references, may be <code>null</code>
      */
-    public void setUnresolvableReferences( List<String> unresolvableReferences ) {
+    public void setUnresolvableReferences( Set<String> unresolvableReferences ) {
         this.unresolvableReferences = unresolvableReferences;
     }
 
@@ -51,7 +52,7 @@ public class Summary {
     /**
      * @return list of unresolvable references, may be <code>null</code>
      */
-    public List<String> getUnresolvableReferences() {
+    public Set<String> getUnresolvableReferences() {
         return unresolvableReferences;
     }
 

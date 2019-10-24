@@ -1,6 +1,6 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Encapsulates the result of the {@link FeatureReferenceChecker}
@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class FeatureReferenceCheckResult {
 
-    private final List<String> unresolvableReferences;
+    private final Set<String> unresolvableReferences;
 
     /**
      * @param unresolvableReferences
      *            a list of unresolvable reference, may be empty but never <code>null</code>
      */
-    public FeatureReferenceCheckResult( List<String> unresolvableReferences ) {
+    public FeatureReferenceCheckResult( Set<String> unresolvableReferences ) {
         this.unresolvableReferences = unresolvableReferences;
     }
 
@@ -30,7 +30,7 @@ public class FeatureReferenceCheckResult {
     /**
      * @return the detected unresolvable references, may be empty but never <code>null</code>
      */
-    public List<String> getUnresolvableReferences() {
+    public Set<String> getUnresolvableReferences() {
         return unresolvableReferences;
     }
 

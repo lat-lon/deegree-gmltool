@@ -7,6 +7,7 @@ import static org.springframework.batch.core.ExitStatus.COMPLETED;
 import static org.springframework.batch.core.ExitStatus.FAILED;
 
 import java.util.List;
+import java.util.Set;
 
 import org.deegree.feature.persistence.FeatureStoreException;
 import org.deegree.feature.persistence.sql.SQLFeatureStore;
@@ -109,7 +110,7 @@ public class TransactionHandler implements StepExecutionListener {
     }
 
     private void logResult( FeatureReferenceCheckResult featureReferenceCheckResult ) {
-        List<String> unresolvableReferences = featureReferenceCheckResult.getUnresolvableReferences();
+        Set<String> unresolvableReferences = featureReferenceCheckResult.getUnresolvableReferences();
         LOG.info( "Unresolvable references detected:" );
         for ( String unresolvableReference : unresolvableReferences )
             LOG.info( "   - {}", unresolvableReference );

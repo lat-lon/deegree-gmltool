@@ -1,8 +1,9 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Checks if all references can be resolved.
@@ -21,13 +22,13 @@ public class FeatureReferenceChecker {
      * @return the result of the check, never <code>null</code>
      */
     public FeatureReferenceCheckResult checkReferences( List<String> featureIds, List<String> references ) {
-        List<String> unresolvableReferences = collectUnresolvableReferences( ensureNotNull( featureIds ),
+        Set<String> unresolvableReferences = collectUnresolvableReferences( ensureNotNull( featureIds ),
                                                                              ensureNotNull( references ) );
         return new FeatureReferenceCheckResult( unresolvableReferences );
     }
 
-    private List<String> collectUnresolvableReferences( List<String> featureIds, List<String> references ) {
-        List<String> unresolvableReferences = new ArrayList<>();
+    private Set<String> collectUnresolvableReferences( List<String> featureIds, List<String> references ) {
+        Set<String> unresolvableReferences = new HashSet<>( );
         if ( featureIds != null && references != null ) {
             for ( String reference : references ) {
                 String referenceId = parseReference( reference );
