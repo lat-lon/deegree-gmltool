@@ -104,13 +104,14 @@ public class GmlLoaderConfiguration {
 
     @Bean
     public Step step( TransactionHandler transactionHandler, GmlReader gmlReader,
-                            FeatureReferencesParser featureReferencesParser, FeatureStoreWriter featureStoreWriter, ReportWriter reportWriter ) {
-        return stepBuilderFactory.get( "gmlLoaderStep" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).writer( featureStoreWriter ).listener( transactionHandler ).listener( reportWriter ).build();
+                            FeatureReferencesParser featureReferencesParser, FeatureStoreWriter featureStoreWriter ) {
+        return stepBuilderFactory.get( "gmlLoaderStep" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).writer( featureStoreWriter ).listener( transactionHandler ).build();
     }
 
     @Bean
-    public Job job( Step step ) {
-        return jobBuilderFactory.get( "gmlLoaderJob" ).incrementer( new RunIdIncrementer() ).start( step ).build();
+    public Job job( Step step, ReportWriter reportWriter ) {
+        return jobBuilderFactory.get( "gmlLoaderJob" ).incrementer( new RunIdIncrementer() ).start( step ).listener(
+                        reportWriter ).build();
     }
 
     private List<String> parseDisabledResources( String disabledResources ) {
