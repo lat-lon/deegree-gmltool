@@ -1,25 +1,27 @@
 package de.deegreeenterprise.tools.featurestoresql.loader;
 
-import static java.util.concurrent.TimeUnit.HOURS;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.MINUTES;
-import static org.slf4j.LoggerFactory.getLogger;
+import org.slf4j.Logger;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.StepExecutionListener;
+import static java.util.concurrent.TimeUnit.HOURS;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class ReportWriter implements StepExecutionListener {
+public class ReportWriter extends JobExecutionListenerSupport {
 
     private static final Logger LOG = getLogger( ReportWriter.class );
 
@@ -31,9 +33,9 @@ public class ReportWriter implements StepExecutionListener {
 
     /**
      * @param summary
-     *            with the results of import, never <code>null</code>
+     *                 with the results of import, never <code>null</code>
      * @param outFile
-     *            to write the output, never <code>null</code>
+     *                 to write the output, never <code>null</code>
      */
     public ReportWriter( Summary summary, Path outFile ) {
         this.summary = summary;
@@ -41,13 +43,11 @@ public class ReportWriter implements StepExecutionListener {
     }
 
     @Override
-    public void beforeStep( StepExecution stepExecution ) {
-    }
+    public void afterJob( JobExecution jobExecution ) {
+        StepExecution stepExecution = getStepExecution( jobExecution );
 
-    @Override
-    public ExitStatus afterStep( StepExecution stepExecution ) {
         ExitStatus exitStatus = stepExecution.getExitStatus();
-        try (PrintWriter writer = new PrintWriter( outFile.toFile() )) {
+        try ( PrintWriter writer = new PrintWriter( outFile.toFile() ) ) {
             writer.println( "Start: " + getStartTime( stepExecution ) );
             writer.println( "Time needed: " + getTimeNeeded( stepExecution ) );
 
@@ -71,7 +71,11 @@ public class ReportWriter implements StepExecutionListener {
         } catch ( IOException e ) {
             LOG.warn( "Report could not be created: {}", e.getMessage() );
         }
-        return exitStatus;
+    }
+
+    private StepExecution getStepExecution( JobExecution jobExecution ) {
+        Collection<StepExecution> stepExecutions = jobExecution.getStepExecutions();
+        return stepExecutions.iterator().next();
     }
 
     private String getTimeNeeded( StepExecution stepExecution ) {
