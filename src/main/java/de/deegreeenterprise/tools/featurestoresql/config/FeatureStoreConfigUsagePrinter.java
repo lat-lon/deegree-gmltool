@@ -8,14 +8,17 @@ public class FeatureStoreConfigUsagePrinter {
     public static void printUsage() {
         System.out.println( "Usage: java -jar deegree-gml-tool.jar FeatureStoreConfigLoader -schemaUrl=<url-or-path/to/file> [options]" );
         System.out.println();
+        System.out.println( "arguments:" );
+        System.out.println( " -schemaUrl=<url-or-path/to/file>, path to the schema, may be an local reference or http url" );
+        System.out.println();
         System.out.println( "options:" );
-        System.out.println( " -format={deegree|ddl|all}" );
-        System.out.println( " -srid=<epsg_code>" );
-        System.out.println( " -idtype={int|uuid}" );
-        System.out.println( " -mapping={relational|blob}" );
-        System.out.println( " -dialect={postgis|oracle}" );
-        System.out.println( " -cycledepth=INT (positive integer value to specify the depth of cycles; default: 0)" );
-        System.out.println( " -listOfPropertiesWithPrimitiveHref=<path/to/file>" );
+        System.out.println( " -format={deegree|ddl|all}, default=deegree" );
+        System.out.println( " -srid=<epsg_code>, default=4258" );
+        System.out.println( " -idtype={int|uuid}, default=int" );
+        System.out.println( " -mapping={relational|blob}, default=relational" );
+        System.out.println( " -dialect={postgis|oracle}, default=postgis" );
+        System.out.println( " -cycledepth=INT, positive integer value to specify the depth of cycles, default=0" );
+        System.out.println( " -listOfPropertiesWithPrimitiveHref=<path/to/file>, not set by default" );
         System.out.println();
         System.out.println( "The option listOfPropertiesWithPrimitiveHref references a file listing properties which are written with primitive instead of feature mappings (see deegree-webservices documentation and README of this tool for further information):" );
         System.out.println( "---------- begin file ----------" );
