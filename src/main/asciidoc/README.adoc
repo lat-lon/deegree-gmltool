@@ -26,16 +26,20 @@ Aennchenstraße 19 53177 Bonn +
 
 [subs="attributes+"]
 ------------------------------
-Usage: java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader [options]
+Usage: java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -schemaUrl=<url_to_schema_file> [options]
+
+arguments:
+ -schemaUrl=<url_to_schema_file>, URL or path to schema file
 
 options:
- -schemaUrl=<url_to_schema_file>
  -format={deegree|ddl|all}, default=deegree
  -srid=<epsg_code>, default=4258
  -idtype={int|uuid}, default=int
  -mapping={relational|blob}, default=relational
  -dialect={postgis|oracle}, default=postgis
- -listOfPropertiesWithPrimitiveHref=<path/to/file>
+ -cycledepth=INT, positive integer value to specify the depth of cycles, default: 0
+ -listOfPropertiesWithPrimitiveHref=<path/to/file>, not set by default
+
 ------------------------------
 
 The SQL DDL and XML output is written into two separate files in the current directory. The filename of each file is derived from the
@@ -142,13 +146,15 @@ a `gml:FeatureCollection` containing multiple `gml:FeatureMember` elements or a 
 
 [subs="attributes+"]
 ------------------------------
-Usage: java -jar deegree-gml-tool-{tool-version}.jar GmlLoader [options]
+Usage: java -jar deegree-gml-tool-{tool-version}.jar GmlLoader -pathToFile=<path/to/gmlfile> -workspaceName=<workspace_identifier> -sqlFeatureStoreId=<feature_store_identifier> [options]
 
-options:
+arguments:
  -pathToFile=<path/to/gmlfile>, the path to the GML file to import
  -workspaceName=<workspace_identifier>, the name of the deegree workspace used for the import. Must be located at default DEEGREE_WORKSPACE_ROOT directory
  -sqlFeatureStoreId=<feature_store_identifier>, the ID of the SQLFeatureStore in the given workspace
- -disabledResources=<urlpatterns>, a comma separated list url patterns which should not be resolved
+
+options:
+ -disabledResources=<urlpatterns>, a comma separated list url patterns which should not be resolved, not set by default
 ------------------------------
 
 [NOTE]
