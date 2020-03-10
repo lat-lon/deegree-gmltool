@@ -144,6 +144,10 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
             GMLStreamReader gmlStreamReader = GMLInputFactory.createGMLStreamReader( version, xmlStream );
             gmlStreamReader.setApplicationSchema( findSchema() );
             gmlStreamReader.setReferencePatternMatcher( parseDisabledResources(  ) );
+            gmlStreamReader.setResolver( ( uri, baseURL ) -> {
+                // Disable resolving of references
+                return null;
+            } );
 
             if ( new QName( WFS_200_NS, "FeatureCollection" ).equals( xmlStream.getName() ) ) {
                 LOG.debug( "Features embedded in wfs20:FeatureCollection" );
