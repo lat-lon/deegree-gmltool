@@ -16,6 +16,7 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import org.deegree.commons.tom.gml.GMLObject;
 import org.deegree.commons.xml.stax.XMLStreamReaderWrapper;
 import org.deegree.commons.xml.stax.XMLStreamUtils;
 import org.deegree.feature.Feature;
@@ -26,6 +27,7 @@ import org.deegree.feature.types.AppSchema;
 import org.deegree.gml.GMLInputFactory;
 import org.deegree.gml.GMLStreamReader;
 import org.deegree.gml.GMLVersion;
+import org.deegree.gml.reference.GmlDocumentIdContext;
 import org.deegree.gml.reference.matcher.BaseUrlReferencePatternMatcher;
 import org.deegree.gml.reference.matcher.MultipleReferencePatternMatcher;
 import org.deegree.gml.reference.matcher.ReferencePatternMatcher;
@@ -143,11 +145,9 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
             XMLStreamReaderWrapper xmlStream = new XMLStreamReaderWrapper( xmlStreamReader, null );
             GMLStreamReader gmlStreamReader = GMLInputFactory.createGMLStreamReader( version, xmlStream );
             gmlStreamReader.setApplicationSchema( findSchema() );
-            gmlStreamReader.setReferencePatternMatcher( parseDisabledResources(  ) );
-            gmlStreamReader.setResolver( ( uri, baseURL ) -> {
-                // Disable resolving of references
-                return null;
-            } );
+            SkipInternalGmlDocumentIdContext resolver = new SkipInternalGmlDocumentIdContext( version );
+            resolver.setReferencePatternMatcher( parseDisabledResources() );
+            gmlStreamReader.setResolver( resolver );
 
             if ( new QName( WFS_200_NS, "FeatureCollection" ).equals( xmlStream.getName() ) ) {
                 LOG.debug( "Features embedded in wfs20:FeatureCollection" );
@@ -258,6 +258,20 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
             return matcher;
         }
         return null;
+    }
+
+    private class SkipInternalGmlDocumentIdContext extends GmlDocumentIdContext {
+
+        public SkipInternalGmlDocumentIdContext( GMLVersion version ) {
+            super( version );
+        }
+
+        @Override
+        public GMLObject getObject( String id ) {
+            if ( id.startsWith( "#" ) )
+                return null;
+            return super.getObject( id );
+        }
     }
 
 }
