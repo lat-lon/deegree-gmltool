@@ -47,9 +47,9 @@ schema file name in the given `schemaUrl`.
 
 === Usage of option listOfPropertiesWithPrimitiveHref
 
-The option listOfPropertiesWithPrimitiveHref references a file listing properties which are written with primitive instead of feature mappings.
+The option `listOfPropertiesWithPrimitiveHref` references a file listing properties which are written with primitive instead of feature mappings.
 
-For example, in some INSPIRE themes codelists values are stored in `xlink:href` attributes. Corresponding to the GML appplication schema the type is a gml:ReferenceType. Usually deegree would handle this as feature mapping but it is recommended to use a primitive mapping here.
+For example, in some INSPIRE themes codelists values are stored in `xlink:href` attributes. Corresponding to the GML application schema the type is a `gml:ReferenceType`. Usually deegree would handle this as feature mapping but it is recommended to use a primitive mapping here.
 
 Primitive mapping enables direct filtering on those properties with deegree. For example, filtering on INSPIRE codelist hrefs is possible then.
 
@@ -140,9 +140,9 @@ The generated file is './CadastralParcels.xml'. All properties listed in the ref
 
 == Usage GmlLoader
 
-The `GmlLoader` can load a GML instance document into a given database using a deegree workspace with SQLFeatureStore configuration file. Other configuration files than the SQLFeatureStore configuration and referenced resources in the workspace are ignored.
+The `GmlLoader` can load a GML instance document into a given database using a deegree workspace containing a SQLFeatureStore configuration file. Other configuration files than the SQLFeatureStore configuration and referenced resources in the workspace are ignored but they may exist.
 To import a valid, GML-encoded dataset the instance document must conforms to the application schema and shall contain
-a `gml:FeatureCollection` containing multiple `gml:FeatureMember` elements or a `wfs:FeatureCollection` containing multiple `wfs:member`. The gml:id of the inserted features are kept.
+a `gml:FeatureCollection` containing multiple `gml:FeatureMember` elements or a `wfs:FeatureCollection` containing multiple `wfs:member`. The `gml:id` of the inserted features are kept.
 
 [subs="attributes+"]
 ------------------------------
@@ -154,8 +154,15 @@ arguments:
  -sqlFeatureStoreId=<feature_store_identifier>, the ID of the SQLFeatureStore in the given workspace
 
 options:
- -disabledResources=<urlpatterns>, a comma separated list url patterns which should not be resolved, not set by default
+ -disabledResources=<urlpatterns>, a comma separated list URL patterns which should not be resolved, not set by default
 ------------------------------
+
+=== Usage of option disabledResources
+This option shall be used to skip the reference resolving for the given list of URL patterns. This option may have a high impact on the performance when importing large amounts of data.
+
+The following example shows how to skip references to codelist namespaces (add this option to the list of arguments):
+
+    -disabledResources=https://registry.gdi-de.org,http://inspire.ec.europa.eu
 
 [NOTE]
 ====
