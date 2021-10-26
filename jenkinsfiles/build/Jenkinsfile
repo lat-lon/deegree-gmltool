@@ -1,0 +1,29 @@
+pipeline {
+  agent any
+  tools {
+    maven 'maven-3.6'
+    jdk 'corretto-jdk8'
+  }
+  parameters {
+    string(defaultValue: "main", description: 'Set git branch', name: 'BRANCH')
+  }
+  stages {
+    stage('Preparation') {
+      steps{
+        deleteDir()
+        git url: 'git@github.com:lat-lon/deegree-gmltool.git', branch: '${BRANCH}'
+        sh 'mvn --version'
+      }
+    }
+    stage('Build') {
+      steps{
+        sh 'mvn clean install'
+      }
+    }
+    stage('Deploy') {
+      steps{
+        sh 'mvn deploy'
+      }
+    }
+  }
+}
