@@ -44,23 +44,22 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:deegree-enterprise/deegree-core.git</connection>
-    <developerConnection>scm:git:git@github.com:deegree-enterprise/deegree-core.git</developerConnection>
-    <url>https://github.com/deegree-enterprise/deegree-core</url>
+    <connection>scm:git:git@github.com:deegree/deegree-gmltool.git</connection>
+    <developerConnection>scm:git:git@github.com:deegree/deegree-gmltool.git</developerConnection>
+    <url>https://github.com/deegree/deegree-gmltool</url>
     <tag>HEAD</tag>
   </scm>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <revdate>${maven.build.timestamp}</revdate>
-    <revnumber>${project.version}</revnumber>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <deegree.version>3.4.17</deegree.version>
-    <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
-    <spring-batch.version>4.0.1.RELEASE</spring-batch.version>
-    <spring-framework.version>5.0.8.RELEASE</spring-framework.version>
-  </properties>
+  <distributionManagement>
+    <repository>
+      <id>deegree-releases</id>
+      <url>https://repo.deegree.org/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>deegree-snapshots</id>
+      <url>https://repo.deegree.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <repositories>
     <repository>
@@ -74,6 +73,18 @@
       </snapshots>
     </repository>
   </repositories>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <revdate>${maven.build.timestamp}</revdate>
+    <revnumber>${project.version}</revnumber>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <deegree.version>3.4.17</deegree.version>
+    <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+    <spring-batch.version>4.0.1.RELEASE</spring-batch.version>
+    <spring-framework.version>5.0.8.RELEASE</spring-framework.version>
+  </properties>
 
   <build>
     <plugins>
@@ -292,18 +303,7 @@
       <version>${spring-batch.version}</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
-  <distributionManagement>
-    <repository>
-      <id>dee-releases</id>
-      <url>http://buildserver.deegree-enterprise.de/nexus/content/repositories/dee-releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>dee-snapshots</id>
-      <url>http://buildserver.deegree-enterprise.de/nexus/content/repositories/dee-snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
 
 </project>
