@@ -141,7 +141,9 @@ public class GmlReader extends AbstractItemStreamItemReader<Feature> implements
         try {
             this.inputStream = this.resource.getInputStream();
             GMLVersion version = GMLVersion.GML_32;
-            this.xmlStreamReader = XMLInputFactory.newFactory().createXMLStreamReader( this.inputStream );
+            XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+            xmlInputFactory.setProperty( XMLInputFactory.IS_COALESCING, true );
+            this.xmlStreamReader = xmlInputFactory.createXMLStreamReader( this.inputStream );
             XMLStreamReaderWrapper xmlStream = new XMLStreamReaderWrapper( xmlStreamReader, null );
             GMLStreamReader gmlStreamReader = GMLInputFactory.createGMLStreamReader( version, xmlStream );
             gmlStreamReader.setApplicationSchema( findSchema() );
