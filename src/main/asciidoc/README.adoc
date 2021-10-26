@@ -3,24 +3,14 @@
 :toc: macro
 :toclevels: 3
 :numbered:
-:title-logo-image: images/Logo_deegree.png
+:title-logo-image: images/logo.png
 
 = deegree-gml-tools
 
 This documentation contains the description of the command line interface (CLI) `deegreeGmlTool`. The command line utilities based on deegree
 can generate SQL DDL scripts and deegree SQLFeatureStore configuration files from GML application schemas. Furthermore the command line supports a
 function to load a GML instance document directly into an existing deegree SQLFeatureStore. The CLI supports Oracle (Locator/Spatial) DBMS
-and PostgreSQL/PostGIS DBMS. The command line interface can be found in the directory _software_ of the deegree Enterprise distribution bundle.
-
-
-
-grit - graphische Informationstechnik - Beratungsgesellschaft mbH +
-info@grit.de http://www.grit.de +
-Landwehrstr. 143 59368 Werne +
-
-lat/lon - Gesellschaft für raumbezogene Informationssysteme mbH +
-info@lat-lon.de http://www.lat-lon.de/ +
-Aennchenstraße 19 53177 Bonn +
+and PostgreSQL/PostGIS DBMS. The command line interface ist available on the http://www.deegree.org[deegree home page].
 
 == Usage FeatureStoreConfigLoader
 
