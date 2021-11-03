@@ -10,7 +10,7 @@
 This documentation contains the description of the command line interface (CLI) `deegreeGmlTool`. The command line utilities based on deegree
 can generate SQL DDL scripts and deegree SQLFeatureStore configuration files from GML application schemas. Furthermore the command line supports a
 function to load a GML instance document directly into an existing deegree SQLFeatureStore. The CLI supports Oracle (Locator/Spatial) DBMS
-and PostgreSQL/PostGIS DBMS. The command line interface ist available on the http://www.deegree.org[deegree home page].
+and PostgreSQL/PostGIS DBMS. The command line interface is available on the http://www.deegree.org[deegree home page].
 
 == Usage FeatureStoreConfigLoader
 
@@ -60,7 +60,7 @@ Example:
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=ddl -idtype=uuid -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=ddl -idtype=uuid -schemaUrl=https://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.sql'.    
@@ -69,7 +69,7 @@ The generated file is './CadastralParcels.sql'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=deegree -idtype=uuid -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=deegree -idtype=uuid -schemaUrl=https://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
     
 The generated file is './CadastralParcels.xml'.    
@@ -78,7 +78,7 @@ The generated file is './CadastralParcels.xml'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=ddl -idtype=int -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=ddl -idtype=int -schemaUrl=https://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.sql'.
@@ -87,7 +87,7 @@ The generated file is './CadastralParcels.sql'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=deegree -idtype=int -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=deegree -idtype=int -schemaUrl=https://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.xml'.
@@ -96,7 +96,7 @@ The generated file is './CadastralParcels.xml'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=all -idtype=int -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -srid=25832 -format=all -idtype=int -schemaUrl=https://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
@@ -105,7 +105,7 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml'.
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -format=all -mapping=blob http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -format=all -mapping=blob -schemaUrl=https://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
     
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with Blob-Mapping for PostGIS.    
@@ -114,7 +114,7 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' wi
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -format=all -dialect=oracle -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -format=all -dialect=oracle -schemaUrl=https://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' with relational mapping for Oracle Locator.
@@ -123,7 +123,7 @@ The generated files are './CadastralParcels.sql' and './CadastralParcels.xml' wi
 
 [subs="attributes+"]
 ------------------------------
-java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -format=deegree -listOfPropertiesWithPrimitiveHref=<path/to/file> -schemaUrl=http://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
+java -jar deegree-gml-tool-{tool-version}.jar FeatureStoreConfigLoader -format=deegree -listOfPropertiesWithPrimitiveHref=<path/to/file> -schemaUrl=https://inspire.ec.europa.eu/schemas/cp/4.0/CadastralParcels.xsd
 ------------------------------
 
 The generated file is './CadastralParcels.xml'. All properties listed in the referenced file are written with primitive instead of feature mappings.
@@ -131,7 +131,7 @@ The generated file is './CadastralParcels.xml'. All properties listed in the ref
 == Usage GmlLoader
 
 The `GmlLoader` can load a GML instance document into a given database using a deegree workspace containing a SQLFeatureStore configuration file. Other configuration files than the SQLFeatureStore configuration and referenced resources in the workspace are ignored but they may exist.
-To import a valid, GML-encoded dataset the instance document must conforms to the application schema and shall contain
+To import a valid, GML-encoded dataset, the instance document must conforms to the application schema and shall contain
 a `gml:FeatureCollection` containing multiple `gml:FeatureMember` elements or a `wfs:FeatureCollection` containing multiple `wfs:member`. The `gml:id` of the inserted features are kept.
 
 [subs="attributes+"]
