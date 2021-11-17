@@ -8,6 +8,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,8 +49,17 @@ public class FeatureReferencesParserTestConfig {
     }
 
     @Bean
-    public Step step( GmlReader gmlReader, FeatureReferencesParser featureReferencesParser ) {
-        return stepBuilderFactory.get( "FeatureReferencesParserTestStep" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).build();
+    public ItemWriter itemWriter() {
+        return new ItemWriter<Feature>() {
+            public void write(java.util.List<? extends Feature> items) throws java.lang.Exception {
+                System.out.println(items.toString());
+            }
+        };
+    }
+
+    @Bean
+    public Step step( GmlReader gmlReader, FeatureReferencesParser featureReferencesParser, ItemWriter itemWriter ) {
+        return stepBuilderFactory.get( "FeatureReferencesParserTestStep" ).<Feature, Feature> chunk( 10 ).reader( gmlReader ).processor( featureReferencesParser ).writer( itemWriter ).build();
     }
 
     @Bean
