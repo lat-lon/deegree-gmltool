@@ -14,11 +14,6 @@
 
   <inceptionYear>2016</inceptionYear>
 
-  <!-- Added licence header to source files with:
-       mvn  -Dlicense.addJavaLicenseAfterPackage=false -Dlicense.licenseName=lgpl_v2_1 license:update-file-header
-       Added licence file with:
-       mvn license:download-licenses
-       -->
   <licenses>
     <license>
       <name>GNU Lesser General Public License (LGPL), version 2.1</name>
@@ -28,8 +23,8 @@
   </licenses>
 
   <organization>
-    <name>weichand.de, lat/lon GmbH</name>
-    <url>http://www.lat-lon.de</url>
+    <name>OSGeo deegree</name>
+    <url>https://www.deegree.org</url>
   </organization>
 
   <developers>
@@ -305,6 +300,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
 
 </project>
